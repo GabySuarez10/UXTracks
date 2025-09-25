@@ -1,10 +1,10 @@
 import {Routes} from '@angular/router';
-import { Prueba } from './prueba/prueba';
+import { Homepage } from './homepage/homepage';
 const routeConfig: Routes = [ 
       {
       path: '',
-      component: Prueba,
-      title: 'prueba',
+      component: Homepage,
+      title: 'homepage',
     },
   ];
   export default routeConfig;
