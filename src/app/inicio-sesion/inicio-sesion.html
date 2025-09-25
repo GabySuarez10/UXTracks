@@ -1,1 +1,126 @@
-<p>inicio-sesion works!</p>
+<div class="login-page">
+  <!-- Fondo borroso con efecto de profundidad -->
+  <div class="background-blur">
+    <div class="blur-circle blur-circle-1"></div>
+    <div class="blur-circle blur-circle-2"></div>
+    <div class="blur-circle blur-circle-3"></div>
+    <div class="blur-overlay"></div>
+  </div>
+
+  <!-- Header con navegación -->
+  <header class="login-header">
+    <nav class="login-navbar">
+      <button class="back-btn" (click)="onBackToHome()">
+        ← Volver
+      </button>
+      
+      <a href="/" class="logo-login">
+        <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
+      </a>
+      
+      <div class="header-links">
+        <a href="#manual">Manual de usuario</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#registro" (click)="onRegister()">Registrarse</a>
+        <button class="btn-header-login active">Iniciar sesión</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Contenedor principal del login -->
+  <main class="login-main">
+    <div class="login-container">
+      <!-- Card de login -->
+      <div class="login-card">
+        <!-- Logo dentro de la card -->
+        <div class="login-card-header">
+          <div class="logo-card">
+            <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span>
+          </div>
+          <h1>Iniciar sesión</h1>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <!-- Campo Usuario/Email -->
+          <div class="form-group">
+            <label for="email">Usuario</label>
+            <div class="input-wrapper">
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="form-input"
+                [class.error]="hasError('email', 'required') || hasError('email', 'email')"
+                placeholder="Ingresa tu email"
+                autocomplete="email"
+              />
+              <span class="input-icon">👤</span>
+            </div>
+            <div class="error-message" *ngIf="email?.touched && email?.errors">
+              {{ getErrorMessage('email') }}
+            </div>
+          </div>
+
+          <!-- Campo Contraseña -->
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <div class="input-wrapper">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                formControlName="password"
+                class="form-input"
+                [class.error]="hasError('password', 'required') || hasError('password', 'minlength')"
+                placeholder="Ingresa tu contraseña"
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              >
+                {{ showPassword ? '🙈' : '👁️' }}
+              </button>
+            </div>
+            <div class="error-message" *ngIf="password?.touched && password?.errors">
+              {{ getErrorMessage('password') }}
+            </div>
+          </div>
+
+          <!-- Recordarme -->
+          <div class="form-options">
+            <label class="checkbox-wrapper">
+              <input
+                type="checkbox"
+                formControlName="rememberMe"
+                class="checkbox-input"
+              />
+              <span class="checkbox-custom"></span>
+              Recordarme
+            </label>
+
+            <button
+              type="button"
+              class="forgot-password-link"
+              (click)="onForgotPassword()"
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
+       <button
+            type="submit"
+            class="btn-login"
+            [disabled]="isLoading || !loginForm.valid"
+            [class.loading]="isLoading"
+          >
+            <span *ngIf="!isLoading">Iniciar sesión</span>
+            <span *ngIf="isLoading" class="loading-spinner">⏳ Iniciando sesión...</span>
+          </button>
+          
+
+          <!-- Error general -->
+          <div class="login-error" *ngIf="loginError">
+            {{ loginError }}
+          </div>

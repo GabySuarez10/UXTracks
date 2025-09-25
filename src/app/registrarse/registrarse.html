@@ -1,1 +1,208 @@
-<p>registrarse works!</p>
+<div class="register-page">
+  <div class="background-blur">
+    <div class="blur-circle blur-circle-1"></div>
+    <div class="blur-circle blur-circle-2"></div>
+    <div class="blur-circle blur-circle-3"></div>
+    <div class="blur-overlay"></div>
+  </div>
+  <!-- Header con navegación -->
+  <header class="register-header">
+    <nav class="register-navbar">
+      <button class="back-btn" (click)="onBackToHome()">
+        ← Volver
+      </button>
+      
+      <a href="/" class="logo-register">
+         <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
+      </a>
+      
+      <div class="header-links">
+        <a href="#manual">Manual de usuario</a>
+        <a href="#servicios">Servicios</a>
+        <a href="btn-header-register active">Registrarse</a>
+        <button class="btn-header-login" (click)="onLogin()">Iniciar sesión</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Contenedor principal del registro -->
+  <main class="register-main">
+    <div class="register-container">
+      <!-- Card de registro -->
+      <div class="register-card">
+        <!-- Logo dentro de la card -->
+        <div class="register-card-header">
+          <div class="logo-card">
+            <span class="ux-part">UX</span><span class="t-part">T</span>
+          </div>
+          <h1>Crear cuenta</h1>
+          <p class="register-subtitle">Registrate para acceder a nuestros servicios y conocer el comportamiento de tus usuarios</p>
+        </div>
+
+        <!-- Mensaje de éxito -->
+        <div class="success-message" *ngIf="registerSuccess">
+          <div class="success-icon">✅</div>
+          <h3>¡Registro exitoso!</h3>
+          <p>Tu cuenta ha sido creada correctamente. Te redirigiremos al inicio de sesión...</p>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form" *ngIf="!registerSuccess">
+          <!-- Campo Nombre de Usuario -->
+          <div class="form-group">
+            <label for="username">Nombre de usuario</label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="username"
+                formControlName="username"
+                class="form-input"
+                [class.error]="username?.touched && username?.errors"
+                placeholder="Elige un nombre de usuario"
+                autocomplete="username"
+              />
+              <span class="input-icon">👤</span>
+            </div>
+            <div class="error-message" *ngIf="username?.touched && username?.errors">
+              {{ getErrorMessage('username') }}
+            </div>
+          </div>
+
+          <!-- Campo Email -->
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <div class="input-wrapper">
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="form-input"
+                [class.error]="email?.touched && email?.errors"
+                placeholder="tu@email.com"
+                autocomplete="email"
+              />
+              <span class="input-icon">📧</span>
+            </div>
+            <div class="error-message" *ngIf="email?.touched && email?.errors">
+              {{ getErrorMessage('email') }}
+            </div>
+          </div>
+
+          <!-- Campo Contraseña -->
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <div class="input-wrapper">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                formControlName="password"
+                class="form-input"
+                [class.error]="password?.touched && password?.errors"
+                placeholder="Mínimo 8 caracteres"
+                autocomplete="new-password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              >
+                {{ showPassword ? '🙈' : '👁️' }}
+              </button>
+            </div>
+            
+            <!-- Indicador de fortaleza de contraseña -->
+            <div class="password-strength" *ngIf="password?.value">
+              <div class="strength-bar">
+                <div class="strength-fill" [class]="getPasswordStrengthClass()"></div>
+              </div>
+              <span class="strength-text" [class]="getPasswordStrengthClass()">
+                Seguridad: {{ getPasswordStrength() }}
+              </span>
+            </div>
+            
+            <div class="error-message" *ngIf="password?.touched && password?.errors">
+              {{ getErrorMessage('password') }}
+            </div>
+          </div>
+
+          <!-- Campo Confirmar Contraseña -->
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar contraseña</label>
+            <div class="input-wrapper">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                class="form-input"
+                [class.error]="(confirmPassword?.touched && confirmPassword?.errors) || hasFormError('passwordMismatch')"
+                placeholder="Repite tu contraseña"
+                autocomplete="new-password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="toggleConfirmPasswordVisibility()"
+                [attr.aria-label]="showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              >
+                {{ showConfirmPassword ? '🙈' : '👁️' }}
+              </button>
+            </div>
+            <div class="error-message" *ngIf="confirmPassword?.touched && confirmPassword?.errors">
+              {{ getErrorMessage('confirmPassword') }}
+            </div>
+            <div class="error-message" *ngIf="hasFormError('passwordMismatch')">
+              Las contraseñas no coinciden
+            </div>
+          </div>
+
+          <!-- Términos y condiciones -->
+          <div class="form-group">
+            <label class="checkbox-wrapper">
+              <input
+                type="checkbox"
+                formControlName="acceptTerms"
+                class="checkbox-input"
+              />
+              <span class="checkbox-custom"></span>
+              <span class="checkbox-text">
+                Acepto los 
+                <button type="button" class="terms-link">términos y condiciones</button>
+                y la 
+                <button type="button" class="terms-link">política de privacidad</button>
+              </span>
+            </label>
+            <div class="error-message" *ngIf="acceptTerms?.touched && acceptTerms?.errors">
+              Debes aceptar los términos y condiciones
+            </div>
+          </div>
+
+          <!-- Error general -->
+          <div class="register-error" *ngIf="registerError">
+            {{ registerError }}
+          </div>
+
+          <!-- Botón de registrarse -->
+          <button
+            type="submit"
+            class="btn-register"
+            [disabled]="isLoading || !registerForm.valid"
+            [class.loading]="isLoading"
+          >
+            <span *ngIf="!isLoading">Registrarse</span>
+            <span *ngIf="isLoading" class="loading-spinner">⏳ Creando cuenta...</span>
+          </button>
+        </form>
+        <!-- Link de login (solo si no hay éxito) -->
+        <div class="register-footer" *ngIf="!registerSuccess">
+          <p>
+            ¿Ya tienes una cuenta? 
+            <button type="button" class="login-link" (click)="onLogin()">
+              Iniciar sesión
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
