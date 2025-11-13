@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { Homepage } from './homepage/homepage';
 import { InicioSesion } from './inicio-sesion/inicio-sesion';
 import { Registro } from './registrarse/registrarse';
+import { instruccionesInicio } from './instrucciones-inicio/instrucciones-inicio';
+import { VincularSitio } from './vincular-sitio/vincular-sitio';
 
 const routeConfig: Routes = [ 
   {
@@ -18,6 +20,16 @@ const routeConfig: Routes = [
     path: 'registro', // /registro
     component: Registro,
     title: 'registro',
+  },
+  {
+    path: 'instrucciones', // /instrucciones
+    component: instruccionesInicio,
+    title: 'instrucciones',
+  },
+   {
+    path: 'vincular', // /registro
+    component: VincularSitio,
+    title: 'Vincular Sitio',
   }
 ];
 

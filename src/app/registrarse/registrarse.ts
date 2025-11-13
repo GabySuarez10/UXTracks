@@ -12,6 +12,9 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
   styleUrls: ['./registrarse.css']
 })
 export class Registro {
+onRegister() {
+throw new Error('Method not implemented.');
+}
   registerForm: FormGroup;
   isLoading = false;
   showPassword = false;

@@ -1,0 +1,195 @@
+<!-- primera-vez/primera-vez.html -->
+<div class="welcome-page">
+  <!-- Header -->
+  <header class="welcome-header">
+    <nav class="welcome-navbar">
+      <a href="/" class="logo-welcome">
+       <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
+      </a>
+      
+      <div class="header-actions">
+        
+        <a href="#manual" class="header-link">Manual de usuario</a>
+        <button class="btn-logout" (click)="onLogout()">
+          Cerrar sesión
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="welcome-main">
+    <div class="welcome-container">
+      <!-- Hero Section -->
+      <div class="welcome-hero">
+        <div class="hero-icon">👋</div>
+        <h1>
+          ¿Primera vez en 
+          <span class="logo-inline">
+              <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
+          </span>?
+        </h1>
+        <p class="hero-subtitle">
+          Integra nuestro script en tu sitio en <strong>4 sencillos pasos</strong> y 
+          empieza a recopilar datos en minutos.
+        </p>
+      </div>
+
+      <!-- Progress Indicator -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            [style.width.%]="((currentStep + 1) / steps.length) * 100"
+          ></div>
+        </div>
+        <div class="progress-text">
+          Paso {{ currentStep + 1 }} de {{ steps.length }}
+        </div>
+      </div>
+
+      <!-- Steps Navigation Pills -->
+      <div class="steps-pills">
+        <button
+          *ngFor="let step of steps; let i = index; trackBy: trackByStep"
+          class="step-pill"
+          [class]="getStepClass(i)"
+          (click)="goToStep(i)"
+          [attr.aria-label]="'Ir al paso ' + step.number"
+        >
+          <span class="pill-icon">{{ step.icon }}</span>
+          <span class="pill-number">{{ step.number }}</span>
+        </button>
+      </div>
+
+      <!-- Current Step Content -->
+      <div class="step-content">
+        <div 
+          class="step-card"
+          *ngFor="let step of steps; let i = index"
+          [class.active]="i === currentStep"
+        >
+          <div class="step-icon-large">{{ step.icon }}</div>
+          
+          <div class="step-header">
+            <span class="step-number-badge">Paso {{ step.number }}</span>
+            <h2>{{ step.title }}</h2>
+          </div>
+          
+          <p class="step-description">{{ step.description }}</p>
+          
+          <!-- Script Code Box (solo en paso 1) -->
+          <div class="code-container" *ngIf="step.code">
+            <div class="code-header">
+              <span class="code-label">Script de ejemplo:</span>
+            </div>
+            <pre class="code-block"><code>{{ step.code }}</code></pre>
+          </div>
+
+          <!-- Visual Example (paso 2) -->
+          <div class="visual-example" *ngIf="step.number === 2">
+            <div class="code-example">
+              <div class="code-line">&lt;html&gt;</div>
+              <div class="code-line indent-1">&lt;body&gt;</div>
+              <div class="code-line indent-2">&lt;!-- Tu contenido aquí --&gt;</div>
+              <div class="code-line indent-2"></div>
+              <div class="code-line indent-2 highlight">
+                &lt;!-- Pega el script aquí 👇 --&gt;
+              </div>
+              <div class="code-line indent-2 highlight">
+                &lt;script src="..."&gt;&lt;/script&gt;
+              </div>
+              <div class="code-line indent-1">&lt;/body&gt;</div>
+              <div class="code-line">&lt;/html&gt;</div>
+            </div>
+          </div>
+
+          <!-- Dashboard Preview (paso 3) -->
+          <div class="dashboard-preview" *ngIf="step.number === 3">
+            <div class="preview-card">
+              <div class="preview-header">
+                <span class="preview-icon">📊</span>
+                <span class="preview-title">Tu Dashboard</span>
+              </div>
+              <div class="preview-content">
+                <div class="preview-metric">
+                  <span class="metric-icon">👥</span>
+                  <span class="metric-label">Visitantes en tiempo real</span>
+                </div>
+                <div class="preview-metric">
+                  <span class="metric-icon">🖱️</span>
+                  <span class="metric-label">Cantidad de clics y scrolls</span>
+                </div>
+                <div class="preview-metric">
+                  <span class="metric-icon">📈</span>
+                  <span class="metric-label">Mapas de calor</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detail Note -->
+          <div class="step-detail" *ngIf="step.detail">
+            <span class="detail-icon">💡</span>
+            <span class="detail-text">{{ step.detail }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="step-navigation">
+        <button 
+          class="btn-nav btn-prev"
+          (click)="prevStep()"
+          [disabled]="isFirstStep()"
+          *ngIf="!isFirstStep()"
+        >
+          ← Anterior
+        </button>
+
+        <button 
+          class="btn-nav btn-next"
+          (click)="nextStep()"
+          *ngIf="!isLastStep()"
+        >
+          Siguiente →
+        </button>
+
+        <button 
+          class="btn-nav btn-finish"
+          (click)="onAddWebsite()"
+          *ngIf="isLastStep()"
+        >
+          Añadir sitio web
+        </button>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="btn-text-link" (click)="onSkipTutorial()">
+          Omitir tutorial
+        </button>
+        <span class="separator">•</span>
+        <button class="btn-text-link" (click)="onViewDashboard()">
+          Ir al dashboard
+        </button>
+      </div>
+
+      <!-- Help Section -->
+      <div class="help-section">
+        <div class="help-card">
+          <span class="help-icon">❓</span>
+          <div class="help-content">
+            <h3>¿Necesitas ayuda?</h3>
+            <p>Consulta nuestro <a href="#manual">manual de usuario</a> o contacta a soporte.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="welcome-footer">
+    <p>© 2025 UXTracks. Mejorando la experiencia de usuario, una métrica a la vez.</p>
+  </footer>
+</div>

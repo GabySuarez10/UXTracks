@@ -1,0 +1,162 @@
+<!-- vincular-sitio/vincular-sitio.html -->
+<div class="link-site-page">
+  <!-- Header -->
+  <header class="link-header">
+    <nav class="link-navbar">
+      <a href="/" class="logo-link">
+        <span class="ux-part">UX</span><span class="t-part">T</span><span class="racks-part">racks</span>
+      </a>
+      
+      <div class="header-actions">
+        <a href="#manual" class="header-link">Manual de usuario</a>
+        <button class="btn-logout" (click)="onLogout()">
+          Cerrar sesión
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="link-main">
+    <div class="link-container">
+      <!-- Back Button -->
+      <button class="btn-back" (click)="onBack()">
+        <span class="back-icon">←</span>
+        Volver a las instrucciones
+      </button>
+
+      <!-- Success Message -->
+      <div class="success-overlay" *ngIf="showSuccess">
+        <div class="success-card">
+          <div class="success-icon">✅</div>
+          <h2>¡Sitio vinculado exitosamente!</h2>
+          <p>Redirigiendo a tu dashboard...</p>
+          <div class="success-loader"></div>
+        </div>
+      </div>
+
+      <!-- Main Form Card -->
+      <div class="form-card" [class.blur]="showSuccess">
+        <!-- Title Section -->
+        <div class="form-header">
+          <h1>Vincula tu sitio web</h1>
+          <p class="form-subtitle">
+            Completa la información para comenzar a rastrear métricas en tu sitio
+          </p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="siteForm" (ngSubmit)="onFinish()" class="site-form">
+          <!-- Site Name Field -->
+          <div class="form-group">
+            <label for="siteName" class="form-label">
+              Nombre del sitio web
+              <span class="required-mark">*</span>
+            </label>
+            <input
+              type="text"
+              id="siteName"
+              formControlName="siteName"
+              class="form-input"
+              [class.error]="siteName?.touched && siteName?.errors"
+              placeholder="Ej: Mi Tienda Online"
+              autocomplete="off"
+            />
+            <div class="input-hint" *ngIf="!siteName?.touched || !siteName?.errors">
+              Ingresa un nombre descriptivo para identificar tu sitio
+            </div>
+            <div class="error-message" *ngIf="siteName?.touched && siteName?.errors">
+              {{ getErrorMessage() }}
+            </div>
+          </div>
+
+          <!-- Script Section -->
+          <div class="script-section">
+            <div class="script-header">
+              <label class="form-label">
+                URL del script para añadir a las páginas
+                <span class="info-icon" title="Copia este script y pégalo antes de cerrar la etiqueta &lt;/body&gt;">ℹ️</span>
+              </label>
+              <button 
+                type="button"
+                class="btn-copy-inline"
+                (click)="copyScript()"
+                [class.copied]="scriptCopied"
+              >
+                <span *ngIf="!scriptCopied">📋 Copiar</span>
+                <span *ngIf="scriptCopied">✅ Copiado</span>
+              </button>
+            </div>
+
+            <div 
+              class="script-display"
+              (click)="onScriptClick()"
+              [class.copied]="scriptCopied"
+              title="Click para copiar"
+            >
+              <code>{{ generatedScript }}</code>
+            </div>
+
+            <div class="script-info">
+              <div class="info-card">
+                <span class="info-emoji">💡</span>
+                <div class="info-content">
+                  <strong>¿Dónde colocar el script?</strong>
+                  <p>Pega este código justo antes de la etiqueta <code>&lt;/body&gt;</code> en cada página que desees rastrear.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn-finish"
+              [disabled]="!siteForm.valid || isLoading"
+              [class.loading]="isLoading"
+            >
+              <span *ngIf="!isLoading">Finalizar</span>
+              <span *ngIf="isLoading" class="loading-spinner">
+                <span class="spinner"></span>
+                Guardando...
+              </span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Help Section -->
+        <div class="help-section">
+          <button class="btn-help-link" (click)="onViewInstructions()">
+            ¿Necesitas ayuda? Ver instrucciones paso a paso →
+          </button>
+        </div>
+      </div>
+
+      <!-- Additional Info Cards -->
+      <div class="info-cards">
+        <div class="info-card-secondary">
+          <div class="card-icon">📊</div>
+          <h3>Múltiples páginas</h3>
+          <p>Puedes usar el mismo script en todas las páginas de tu sitio. Las métricas se consolidarán automáticamente.</p>
+        </div>
+
+        <div class="info-card-secondary">
+          <div class="card-icon">⚡</div>
+          <h3>Datos en tiempo real</h3>
+          <p>Una vez instalado el script, comenzarás a ver datos en tu dashboard en menos de 1 minuto.</p>
+        </div>
+      </div>
+        
+    
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="link-footer">
+    <p>© 2025 UXTracks. Todos los derechos reservados.</p>
+  </footer>
+</div>
