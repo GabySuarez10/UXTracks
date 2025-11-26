@@ -4,10 +4,11 @@ import { InicioSesion } from './inicio-sesion/inicio-sesion';
 import { Registro } from './registrarse/registrarse';
 import { instruccionesInicio } from './instrucciones-inicio/instrucciones-inicio';
 import { VincularSitio } from './vincular-sitio/vincular-sitio';
+import { seleccionPaginas } from './seleccion-paginas/seleccion-paginas';
 
 const routeConfig: Routes = [ 
   {
-    path: '', // ruta principal
+    path: 'homepage', // ruta principal
     component: Homepage,
     title: 'homepage',
   },
@@ -30,7 +31,13 @@ const routeConfig: Routes = [
     path: 'vincular', // /registro
     component: VincularSitio,
     title: 'Vincular Sitio',
+  },
+   {
+    path: 'seleccion', // /registro
+    component: seleccionPaginas,
+    title: 'bienvenida',
   }
+
 ];
 
 export default routeConfig;
