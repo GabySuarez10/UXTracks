@@ -14,14 +14,13 @@
         ← Volver
       </button>
       
-      <a href="/" class="logo-login">
+      <a href="/homepage" class="logo-login">
         <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
       </a>
       
       <div class="header-links">
         <a href="#manual">Manual de usuario</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#registro" (click)="onRegister()">Registrarse</a>
+        <a href="" (click)="onRegister($event)">Registrarse</a>
         <button class="btn-header-login active">Iniciar sesión</button>
       </div>
     </nav>
@@ -91,15 +90,7 @@
 
           <!-- Recordarme -->
           <div class="form-options">
-            <label class="checkbox-wrapper">
-              <input
-                type="checkbox"
-                formControlName="rememberMe"
-                class="checkbox-input"
-              />
-              <span class="checkbox-custom"></span>
-              Recordarme
-            </label>
+            
 
             <button
               type="button"
@@ -118,6 +109,13 @@
             <span *ngIf="!isLoading">Iniciar sesión</span>
             <span *ngIf="isLoading" class="loading-spinner">⏳ Iniciando sesión...</span>
           </button>
+          
+          <p class="register-footer">
+            ¿Aún no tienes una cuenta? 
+            <button type="button" class="register-link" (click)="onRegister($event)">
+              Registrarse
+            </button>
+          </p>
           
 
           <!-- Error general -->

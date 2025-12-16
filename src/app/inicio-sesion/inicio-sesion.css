@@ -560,11 +560,11 @@
 }
 
 /* Footer del login */
-.login-footer {
+.register-footer {
   text-align: center;
 }
 
-.login-footer p {
+.register-footer {
   color: var(--color-gray-dark);
   font-size: 0.9rem;
   margin: 0;

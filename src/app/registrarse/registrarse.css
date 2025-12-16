@@ -624,11 +624,11 @@
 }
 
 /* Footer del registro */
-.register-footer {
+.login-footer {
   text-align: center;
 }
 
-.register-footer p {
+.login-footer p {
   color: var(--color-gray-dark);
   font-size: 0.9rem;
   margin: 0;

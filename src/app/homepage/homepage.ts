@@ -1,5 +1,5 @@
 // homepage/homepage.ts
-
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -25,6 +25,7 @@ interface CarouselImage {
   styleUrls: ['./homepage.css']
 })
 export class Homepage {
+  constructor(private router: Router, private route: ActivatedRoute) {}
   title = 'UXTracks';
   
   features: Feature[] = [
@@ -52,8 +53,7 @@ export class Homepage {
 
   navItems = [
     { label: 'Manual de usuario', link: '#manual' },
-    { label: 'Servicios', link: '#servicios' },
-    { label: 'Registrarse', link: '#registro' }
+    { label: 'Registrarse', link: '/registro' }
   ];
 
   // Datos para el carrusel de "¿Cómo funciona?"
@@ -90,13 +90,17 @@ export class Homepage {
   ];
 
   // Métodos para manejo de eventos
-  onGetStarted(): void {
+  onGetStarted(event: Event): void {
     console.log('Comenzar ahora clicked');
+     event.preventDefault()
+     this.router.navigate(['/login']);
     // Aquí puedes agregar navegación o lógica específica
   }
 
   onLogin(): void {
-    console.log('Iniciar sesión clicked');
+    console.log('Iniciar sesión clicked')
+    this.router.navigate(['/login']);
+
     // Lógica para iniciar sesión
   }
 

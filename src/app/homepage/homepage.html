@@ -3,7 +3,7 @@
   <!-- Header -->
   <header class="header">
     <nav class="navbar">
-      <a href="/" class="logo-uxtracks">
+      <a href="/homepage" class="logo-uxtracks">
   <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
 </a>
       
@@ -41,10 +41,6 @@
         ¡Empieza hoy y transforma la manera<br>
         en que conoces a tus usuarios!
       </p>
-      
-      <button class="btn btn-primary mt-4" (click)="onGetStarted()">
-        Comenzar ahora
-      </button>
     </div>
   </section>
 
@@ -152,7 +148,7 @@
       </p>
       
       <div class="cta-buttons">
-        <button class="btn btn-primary" (click)="onGetStarted()">
+        <button class="btn btn-primary" (click)="onGetStarted($event)">
           Comenzar gratis
         </button>
       </div>

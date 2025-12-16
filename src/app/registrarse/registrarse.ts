@@ -1,5 +1,5 @@
 // registro/registro.ts
-
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,7 +22,10 @@ throw new Error('Method not implemented.');
   registerError = '';
   registerSuccess = false;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.registerForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       email: ['', [Validators.required, Validators.email]],
@@ -65,11 +68,11 @@ throw new Error('Method not implemented.');
         this.isLoading = false;
         this.registerSuccess = true;
         
-        // Después de 2 segundos, redirigir al login
+        // Después de 4 segundos, redirigir al login
         setTimeout(() => {
-          this.onLogin();
-        }, 2000);
-      }, 2000);
+          this.onLogin(new Event('click'));
+        }, 4000);
+      }, 4000);
     } else {
       this.markFormGroupTouched();
     }
@@ -85,16 +88,17 @@ throw new Error('Method not implemented.');
     // Implementar registro con Facebook
   }
 
-  onLogin(): void {
+  onLogin(event: Event): void {
     console.log('Login clicked');
     // Navegar a página de login
-    // this.router.navigate(['/inicio-sesion']);
+     event.preventDefault()
+    this.router.navigate(['/login']);
   }
 
   onBackToHome(): void {
     console.log('Back to home clicked');
     // Navegar a página principal
-    // this.router.navigate(['/']);
+    this.router.navigate(['/homepage']);
   }
 
   togglePasswordVisibility(): void {

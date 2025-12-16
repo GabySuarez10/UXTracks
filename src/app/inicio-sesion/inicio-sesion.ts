@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -18,18 +19,21 @@ throw new Error('Method not implemented.');
   showPassword = false;
   loginError = '';
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+     private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [false]
+      rememberMe: [false],
     });
   }
 
   // Getter para facilitar el acceso a los controles del formulario
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
-  get rememberMe() { return this.loginForm.get('rememberMe'); }
+
 
   // Métodos para manejo del formulario
   onSubmit(): void {
@@ -50,32 +54,22 @@ throw new Error('Method not implemented.');
     }
   }
 
-  onGoogleLogin(): void {
-    console.log('Login with Google');
-    // Implementar login con Google
-  }
-
-  onFacebookLogin(): void {
-    console.log('Login with Facebook');
-    // Implementar login con Facebook
-  }
-
   onForgotPassword(): void {
     console.log('Forgot password clicked');
     // Navegar a página de recuperación de contraseña
     // this.router.navigate(['/forgot-password']);
   }
 
-  onRegister(): void {
+  onRegister(event: Event): void {
     console.log('Register clicked');
+      event.preventDefault()
     // Navegar a página de registro
-    // this.router.navigate(['/registro']);
+     this.router.navigate(['/registro']);
   }
 
   onBackToHome(): void {
     console.log('Back to home clicked');
-    // Navegar a página principal
-    // this.router.navigate(['/']);
+    this.router.navigate(['/homepage']);
   }
 
   togglePasswordVisibility(): void {

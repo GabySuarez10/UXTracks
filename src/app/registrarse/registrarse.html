@@ -12,15 +12,13 @@
         ← Volver
       </button>
       
-      <a href="/" class="logo-register">
+      <a href="/homepage" class="logo-register">
          <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
       </a>
       
       <div class="header-links">
         <a href="#manual">Manual de usuario</a>
-        <a href="#servicios">Servicios</a>
-        <a href="btn-header-register active">Registrarse</a>
-        <button class="btn-header-login" (click)="onLogin()">Iniciar sesión</button>
+        <button class="btn-header-login" (click)="onLogin($event)">Iniciar sesión</button>
       </div>
     </nav>
   </header>
@@ -194,10 +192,10 @@
           </button>
         </form>
         <!-- Link de login (solo si no hay éxito) -->
-        <div class="register-footer" *ngIf="!registerSuccess">
+        <div class="login-footer" *ngIf="!registerSuccess">
           <p>
             ¿Ya tienes una cuenta? 
-            <button type="button" class="login-link" (click)="onLogin()">
+            <button type="button" class="login-link" (click)="onLogin($event)">
               Iniciar sesión
             </button>
           </p>
