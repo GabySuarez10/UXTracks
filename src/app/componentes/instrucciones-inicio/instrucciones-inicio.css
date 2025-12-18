@@ -45,7 +45,7 @@
 .welcome-navbar {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 0rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -82,9 +82,10 @@
 }
 
 .header-link {
+ text-decoration: none;
   color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 1.2rem;
   transition: color var(--transition-fast);
 }
 
@@ -93,20 +94,33 @@
 }
 
 .btn-logout {
-  background-color: var(--color-secondary);
-  color: var(--color-white);
+ display: inline-block;
+  padding: 12px 24px;
   border: none;
-  padding: 0.5rem 1.25rem;
-  border-radius: var(--border-radius);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 1.2rem;
   font-weight: 700;
+  text-decoration: none;
+  text-align: center;
   cursor: pointer;
   transition: all var(--transition-fast);
+  outline: none;
+}
+.btn-logout {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+}
+.btn-logout:hover{
+  background-color: var(--color-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-heavy);
 }
 
-.btn-logout:hover {
-  background-color: var(--color-tertiary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-secondary);
+  border: 2px solid var(--color-secondary);
 }
 
 /* Main Content */

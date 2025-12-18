@@ -171,9 +171,9 @@ export class VincularSitio implements OnInit {
 
   // Navegación
   onBack(): void {
-    console.log('Volver a instrucciones');
+    console.log('Volver al dashboard');
     // Navegar de vuelta a la página de primera vez
-    this.router.navigate(['/instrucciones']);
+    this.router.navigate(['/seleccion']);
   }
 
   onBackToHome(): void {

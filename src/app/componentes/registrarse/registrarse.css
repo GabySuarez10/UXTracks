@@ -106,7 +106,7 @@
 .register-header {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(15px);
-  padding: 1rem 0;
+  padding: 0.3rem 0;
   position: relative;
   z-index: 100;
   box-shadow: var(--shadow-light);
@@ -121,35 +121,9 @@
   align-items: center;
 }
 
-.back-btn {
- display: inline-block;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 700;
-  text-decoration: none;
-  text-align: center;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  outline: none;
-}
-
-.back-btn:hover {
-   background-color: var(--color-secondary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
-  color: var(--color-white);
-}
-
-.back-btn.active {
- background-color: var(--color-secondary);
-  color: var(--color-white);
-}
 .logo-register {
   font-family: var(--font-title, 'Jomhuria', serif);
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 400;
   text-decoration: none;
   display: inline-flex;
@@ -171,9 +145,13 @@
 }
 .header-links {
   display: flex;
+  list-style: none;
+  gap: 2rem;
   align-items: center;
-  gap: 1rem;
+  margin: 0;
+  padding: 0;
 }
+
 .header-links a {
   text-decoration: none;
   color: var(--color-primary);
@@ -181,6 +159,11 @@
   font-size: 1.2rem;
   transition: color var(--transition-fast);
 }
+
+.nav-links a:hover {
+  color: var(--color-secondary);
+}
+
 .back-btn {
  display: inline-block;
   padding: 12px 24px;
@@ -201,47 +184,51 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
   color: var(--color-white);
+  font-size: 1.2rem;
 }
 
 .back-btn.active {
  background-color: var(--color-secondary);
   color: var(--color-white);
-}
-
-.header-links a {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color var(--transition-fast);
+  font-size: 1.2rem;
 }
 
 .header-links a:hover {
   color: var(--color-secondary);
 }
 
-
 .btn-header-login {
+   display: inline-block;
+  padding: 12px 24px;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 1.2rem;
   font-weight: 700;
+  text-decoration: none;
+  text-align: center;
   cursor: pointer;
   transition: all var(--transition-fast);
-  font-family: var(--font-body);
+  outline: none;
 }
-
-
-
-
-
 .btn-header-login {
-  background-color: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+}
+.btn-header-login:hover{
+  background-color: var(--color-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-heavy);
 }
 
-.btn-header-login:hover {
-  background-color: var(--color-primary);
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-secondary);
+  border: 2px solid var(--color-secondary);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-secondary);
   color: var(--color-white);
 }
 
@@ -277,8 +264,8 @@
 
 .logo-card {
   font-family: var(--font-title);
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 5rem;
+  margin-bottom: 0.5rem;
 }
 
 .logo-card .ux-part {
@@ -463,9 +450,10 @@
 }
 
 /* Checkbox personalizado */
+
 .checkbox-wrapper {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   cursor: pointer;
   font-size: 0.9rem;
   line-height: 1.4;
@@ -478,7 +466,7 @@
 .checkbox-custom {
   width: 18px;
   height: 18px;
-  border: 2px solid var(--color-gray-medium);
+  border: 2px solid var(--color-gray-dark);
   border-radius: 3px;
   margin-right: 0.75rem;
   margin-top: 2px;
@@ -503,6 +491,8 @@
 
 .checkbox-text {
   color: var(--color-primary);
+   display: inline;
+ 
 }
 
 .terms-link {

@@ -162,17 +162,16 @@
                 formControlName="acceptTerms"
                 class="checkbox-input"
               />
-              <span class="checkbox-custom"></span>
-              <span class="checkbox-text">
-                Acepto los 
-                <button type="button" class="terms-link">términos y condiciones</button>
-                y la 
-                <button type="button" class="terms-link">política de privacidad</button>
-              </span>
+              <label class="checkbox-container">
+                <input type="checkbox" />
+                <span class="checkbox-text">
+                  Acepto los <a href="#" class="terms-link">términos y condiciones</a> y la
+                 <a href="#" class="terms-link">política de privacidad</a>
+                </span>
+              </label>
+
+
             </label>
-            <div class="error-message" *ngIf="acceptTerms?.touched && acceptTerms?.errors">
-              Debes aceptar los términos y condiciones
-            </div>
           </div>
 
           <!-- Error general -->
