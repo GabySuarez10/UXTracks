@@ -2,6 +2,8 @@
 
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../servicios/auth.service';
 
 interface Step {
   number: number;
@@ -20,9 +22,15 @@ interface Step {
   styleUrls: ['./instrucciones-inicio.css']
 })
 export class instruccionesInicio {
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private route: ActivatedRoute
+  ) {}
   currentStep = 0;
   scriptCopied = false;
-  scriptExample = '<script src="https://cdn.uxtracks.com/uxtracks.js" data-site-id="TU_ID"></script>';
+  scriptExample = '<script src="https://cdn.uxtracks.com/uxtracks.js"></script>';
   userId = 'USR_123456'; // Este vendría del usuario autenticado
 
   steps: Step[] = [
@@ -112,26 +120,26 @@ export class instruccionesInicio {
   onAddWebsite(): void {
     console.log('Añadir sitio web clicked');
     // Navegar a la página de configuración o dashboard
-    // this.router.navigate(['/dashboard/add-website']);
+    this.router.navigate(['/vincular']);
   }
 
   onViewDashboard(): void {
     console.log('Ver dashboard clicked');
     // Navegar al dashboard principal
-    // this.router.navigate(['/dashboard']);
+    this.router.navigate(['/seleccion']);
   }
 
   onLogout(): void {
     console.log('Cerrar sesión clicked');
     // Lógica para cerrar sesión
-    // this.authService.logout();
-    // this.router.navigate(['/']);
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 
   onSkipTutorial(): void {
     console.log('Omitir tutorial clicked');
     // Navegar directamente al dashboard
-    // this.router.navigate(['/dashboard']);
+    this.router.navigate(['/seleccion']);
   }
 
   // Helpers

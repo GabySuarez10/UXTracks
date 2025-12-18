@@ -3,6 +3,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../servicios/auth.service';
+import { Subject, takeUntil } from 'rxjs';
+import { setThrowInvalidWriteToSignalError } from '@angular/core/primitives/signals';
+import { SiteService } from '../../servicios/site.service';
 
 @Component({
   selector: 'app-vincular-sitio',
@@ -22,20 +27,34 @@ export class VincularSitio implements OnInit {
   siteId = '';
   generatedScript = '';
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private siteService: SiteService,
+    private route: ActivatedRoute
+  ) {
     this.siteForm = this.formBuilder.group({
       siteName: ['', [
         Validators.required, 
         Validators.minLength(3),
         Validators.maxLength(100),
         Validators.pattern(/^[a-zA-Z0-9\s\-_.]+$/)
+      ]],
+      siteUrl: ['', [
+        Validators.required,
+        //Validators.pattern(/^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/)
       ]]
     });
   }
 
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
+  username = localStorage.getItem('username') || '';
+  
   ngOnInit(): void {
     this.generateSiteId();
     this.updateScript();
+
   }
 
   // Generar ID único para el sitio
@@ -50,12 +69,16 @@ export class VincularSitio implements OnInit {
 
   // Actualizar script con el ID del sitio
   private updateScript(): void {
-    this.generatedScript = `<script src="https://cdn.uxtracks.com/uxtracks.js" data-site-id="${this.siteId}"></script>`;
+    this.generatedScript = `<script src="https://cdn.uxtracks.com/uxtracks.js"></script>`;
   }
 
   // Getter para el control del nombre
   get siteName() {
     return this.siteForm.get('siteName');
+  }
+
+  get siteUrl() {
+    return this.siteForm.get('siteUrl');
   }
 
   // Copiar script al portapapeles
@@ -98,22 +121,27 @@ export class VincularSitio implements OnInit {
   }
 
   // Validación del nombre del sitio
-  hasError(errorType: string): boolean {
-    const control = this.siteName;
+  hasError(controlName: string, errorType: string): boolean {
+    const control = this.siteForm.get(controlName);
     return control ? control.hasError(errorType) && control.touched : false;
   }
 
-  getErrorMessage(): string {
-    if (this.hasError('required')) {
-      return 'El nombre del sitio es requerido';
+  getErrorMessage(controlName: string): string {
+    const control = this.siteForm.get(controlName);
+    if (this.hasError(controlName, 'required')) {
+      if (controlName === 'siteName') {
+        return 'El nombre del sitio es requerido';
+      } else if (controlName === 'siteUrl') {
+        return 'La URL del sitio es requerida';
+      }
     }
-    if (this.hasError('minlength')) {
+    if (this.hasError(controlName, 'minlength')) {
       return 'El nombre debe tener al menos 3 caracteres';
     }
-    if (this.hasError('maxlength')) {
+    if (this.hasError(controlName, 'maxlength')) {
       return 'El nombre no puede tener más de 100 caracteres';
     }
-    if (this.hasError('pattern')) {
+    if (this.hasError(controlName, 'pattern')) {
       return 'Solo se permiten letras, números, espacios y los caracteres: - _ .';
     }
     return '';
@@ -123,23 +151,19 @@ export class VincularSitio implements OnInit {
   onFinish(): void {
     if (this.siteForm.valid) {
       this.isLoading = true;
-
-      // Simular llamada a API para guardar el sitio
-      setTimeout(() => {
-        console.log('Sitio guardado:', {
-          name: this.siteName?.value,
-          siteId: this.siteId,
-          userId: this.userId
-        });
-        
-        this.isLoading = false;
-        this.showSuccess = true;
-
-        // Redirigir al dashboard después de 2 segundos
-        setTimeout(() => {
-          this.onGoToDashboard();
-        }, 2000);
-      }, 1500);
+      this.siteService.addSite({username: this.username, title: this.siteName?.value, url: this.siteUrl?.value})
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+              this.isLoading = false;
+              console.log('Sitio vinculado exitosamente');
+              this.router.navigate(['/seleccion']);
+          },
+        error: (err) => {
+            this.isLoading = false;
+            console.log(err.error?.message || 'Error vinculando sitio');
+        }
+      });
     } else {
       this.siteName?.markAsTouched();
     }
@@ -149,7 +173,7 @@ export class VincularSitio implements OnInit {
   onBack(): void {
     console.log('Volver a instrucciones');
     // Navegar de vuelta a la página de primera vez
-    // this.router.navigate(['/primera-vez']);
+    this.router.navigate(['/instrucciones']);
   }
 
   onBackToHome(): void {
@@ -164,13 +188,13 @@ export class VincularSitio implements OnInit {
 
   onLogout(): void {
     console.log('Cerrar sesión');
-    // this.authService.logout();
-    // this.router.navigate(['/']);
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 
   onViewInstructions(): void {
     console.log('Ver instrucciones');
-    // this.router.navigate(['/primera-vez']);
+    this.router.navigate(['/instrucciones']);
   }
 
   // Copiar al hacer clic en el campo de script

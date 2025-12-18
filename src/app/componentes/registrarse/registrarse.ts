@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -24,7 +25,8 @@ throw new Error('Method not implemented.');
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService,
   ) {
     this.registerForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
@@ -61,31 +63,30 @@ throw new Error('Method not implemented.');
       this.isLoading = true;
       this.registerError = '';
       this.registerSuccess = false;
-
-      // Simular llamada a API
-      setTimeout(() => {
-        console.log('Register data:', this.registerForm.value);
+      if(this.passwordMatchValidator(this.registerForm)){
+        this.registerError = 'Las contraseñas no coinciden';
         this.isLoading = false;
-        this.registerSuccess = true;
-        
-        // Después de 4 segundos, redirigir al login
-        setTimeout(() => {
-          this.onLogin(new Event('click'));
-        }, 4000);
-      }, 4000);
+        return;
+      }
+      this.authService.register({
+      username: this.username?.value,
+      email: this.email?.value,
+      password: this.password?.value,
+
+    }).subscribe({
+      next: () => {
+            this.isLoading = false;
+            this.registerSuccess = true;
+            this.router.navigate(['/login']);
+        },
+      error: (err) => {
+            this.isLoading = false;
+            this.registerError = err.error?.message || 'Error en el registro';
+        }
+    });
     } else {
       this.markFormGroupTouched();
     }
-  }
-
-  onGoogleRegister(): void {
-    console.log('Register with Google');
-    // Implementar registro con Google
-  }
-
-  onFacebookRegister(): void {
-    console.log('Register with Facebook');
-    // Implementar registro con Facebook
   }
 
   onLogin(event: Event): void {

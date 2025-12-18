@@ -66,7 +66,30 @@
               Ingresa un nombre descriptivo para identificar tu sitio
             </div>
             <div class="error-message" *ngIf="siteName?.touched && siteName?.errors">
-              {{ getErrorMessage() }}
+              {{ getErrorMessage("siteName") }}
+            </div>
+          </div>
+
+          <!-- Site URL Field -->
+          <div class="form-group">
+            <label for="siteUrl" class="form-label">
+              URL del sitio web
+              <span class="required-mark">*</span>
+            </label>
+            <input
+              type="text"
+              id="siteUrl"
+              formControlName="siteUrl"
+              class="form-input"
+              [class.error]="siteUrl?.touched && siteUrl?.errors"
+              placeholder="Ej: https://www.mitienda.com"
+              autocomplete="off"
+            />
+            <div class="input-hint" *ngIf="!siteUrl?.touched || !siteUrl?.errors">
+              Ingresa la URL completa de tu sitio web
+            </div>
+            <div class="error-message" *ngIf="siteUrl?.touched && siteUrl?.errors">
+              {{ getErrorMessage("siteUrl") }}
             </div>
           </div>
 

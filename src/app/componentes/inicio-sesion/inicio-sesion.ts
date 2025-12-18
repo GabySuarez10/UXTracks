@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../servicios/auth.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -21,17 +23,19 @@ throw new Error('Method not implemented.');
 
   constructor(private formBuilder: FormBuilder,
      private router: Router,
+     private authService: AuthService,
     private route: ActivatedRoute
   ) {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false],
     });
   }
 
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
   // Getter para facilitar el acceso a los controles del formulario
-  get email() { return this.loginForm.get('email'); }
+  get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
 
 
@@ -41,14 +45,27 @@ throw new Error('Method not implemented.');
       this.isLoading = true;
       this.loginError = '';
 
-      // Simular llamada a API
-      setTimeout(() => {
-        console.log('Login data:', this.loginForm.value);
-        this.isLoading = false;
-        
-        // Aquí irías a la página principal o dashboard
-        // this.router.navigate(['/dashboard']);
-      }, 2000);
+      this.authService.logout(); //Nos aseguramos que no existan más de un token o username en localstore
+      this.authService.login({username: this.username?.value, password: this.password?.value})
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+              this.isLoading = false;
+              if(this.authService.getActive() == 'true'){
+                if(this.authService.getFirstTime() == 'true'){
+                this.router.navigate(['/instrucciones']);
+              }
+              else{
+                this.router.navigate(['/seleccion']);
+              }
+              console.log('Login exitoso');
+            }
+          },
+        error: (err) => {
+            this.isLoading = false;
+            this.loginError = err.error?.message || 'Credenciales inválidas';
+        }
+      });
     } else {
       this.markFormGroupTouched();
     }

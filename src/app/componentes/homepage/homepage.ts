@@ -93,7 +93,7 @@ export class Homepage {
   onGetStarted(event: Event): void {
     console.log('Comenzar ahora clicked');
      event.preventDefault()
-     this.router.navigate(['/login']);
+     this.router.navigate(['/registro']);
     // Aquí puedes agregar navegación o lógica específica
   }
 

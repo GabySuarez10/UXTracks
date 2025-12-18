@@ -41,23 +41,23 @@
 
         <!-- Formulario -->
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-          <!-- Campo Usuario/Email -->
+          <!-- Campo Usuario -->
           <div class="form-group">
-            <label for="email">Usuario</label>
+            <label for="username">Usuario</label>
             <div class="input-wrapper">
               <input
-                type="email"
-                id="email"
-                formControlName="email"
+                type="username"
+                id="username"
+                formControlName="username"
                 class="form-input"
-                [class.error]="hasError('email', 'required') || hasError('email', 'email')"
-                placeholder="Ingresa tu email"
-                autocomplete="email"
+                [class.error]="hasError('username', 'required') || hasError('username', 'username')"
+                placeholder="Ingresa tu usuario"
+                autocomplete="usuario"
               />
               <span class="input-icon">👤</span>
             </div>
-            <div class="error-message" *ngIf="email?.touched && email?.errors">
-              {{ getErrorMessage('email') }}
+            <div class="error-message" *ngIf="username?.touched && username?.errors">
+              {{ getErrorMessage('username') }}
             </div>
           </div>
 
