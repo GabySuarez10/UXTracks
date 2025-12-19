@@ -35,4 +35,9 @@ export class SiteService {
     addSite(siteData: { username: string, title: string, url: string }): Observable<any> {
         return this.httpClient.post(`${this.apiUrl}/sitios`, siteData);
     }
+    deleteSiteByUrl(url: string): Observable<any> {
+        const params = new HttpParams().set('url', url);
+        console.log(params);
+        return this.httpClient.delete(`${this.apiUrl}/sitios`, { params });
+    }
 }

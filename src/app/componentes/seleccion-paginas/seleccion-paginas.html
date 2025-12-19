@@ -131,7 +131,13 @@
                   <strong>{{ site.recurrentes}}</strong> recurrentes
                 </span>
               </div>
+              <button 
+               class="btn-delete-site"
+              (click)="openDeleteSiteModal(site.url); $event.stopPropagation()">
+               Eliminar sitio
+              </button>
             </div>
+            
 
             <!-- Click to view overlay -->
             <!--
@@ -166,7 +172,31 @@
         </div>
       </div>
     </div>
-  </main>
+    <!-- Modal eliminar sitio -->
+    <div class="modal-backdrop" *ngIf="showDeleteSiteModal">
+  <div class="modal-container" role="dialog" aria-modal="true">
+    
+    <h2 class="modal-title">¿Eliminar sitio web?</h2>
+
+    <p class="modal-text">
+      Esta acción eliminará el sitio y sus métricas asociadas.
+      ¿Deseas continuar?
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeDeleteSiteModal()">
+        Cancelar
+      </button>
+
+      <button class="btn-confirm" (click)="confirmDeleteSite()">
+        Sí, eliminar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+  </main>  
 
   <!-- Footer -->
   <footer class="dashboard-footer">

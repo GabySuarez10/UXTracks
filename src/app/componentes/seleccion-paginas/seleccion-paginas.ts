@@ -219,6 +219,44 @@ confirmDeactivation(): void {
   this.showDeactivateModal = false;
   this.onDeactivation(); // reutilizamos tu lógica existente
 }
+// ===== Modal eliminar sitio =====
+showDeleteSiteModal = false;
+siteUrlToDelete: string | null = null;
+
+openDeleteSiteModal(siteUrl: string): void {
+  this.siteUrlToDelete = siteUrl;
+  this.showDeleteSiteModal = true;
+}
+
+closeDeleteSiteModal(): void {
+  this.showDeleteSiteModal = false;
+  this.siteUrlToDelete = null;
+}
+
+confirmDeleteSite(): void {
+  if (!this.siteUrlToDelete) return;
+
+  this.siteService.deleteSiteByUrl(this.siteUrlToDelete)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe({
+      next: () => {
+        console.log('Sitio eliminado correctamente');
+
+        // Cerrar modal
+        this.showDeleteSiteModal = false;
+        this.siteUrlToDelete = null;
+
+        // Recargar sitios
+        this.totalVisitas = 0;
+        this.loadWebsites();
+      },
+      error: (err) => {
+        console.log('Error al eliminar sitio', err);
+        this.showDeleteSiteModal = false;
+      }
+    });
+}
+
 
 
   onGoToManual(): void {
