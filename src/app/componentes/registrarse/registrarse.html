@@ -156,23 +156,28 @@
 
           <!-- Términos y condiciones -->
           <div class="form-group">
-            <label class="checkbox-wrapper">
-              <input
-                type="checkbox"
-                formControlName="acceptTerms"
-                class="checkbox-input"
-              />
-              <label class="checkbox-container">
-                <input type="checkbox" />
-                <span class="checkbox-text">
-                  Acepto los <a href="#" class="terms-link">términos y condiciones</a> y la
-                 <a href="#" class="terms-link">política de privacidad</a>
-                </span>
-              </label>
+  <label class="checkbox-wrapper">
+    <input
+      type="checkbox"
+      formControlName="acceptTerms"
+      class="checkbox-input"
+    />
+
+    <span class="checkbox-custom"></span>
+
+    <span class="checkbox-text">
+      Acepto los
+      <a href="#" class="terms-link">términos y condiciones</a>
+      y la
+      <a href="#" class="terms-link">política de privacidad</a>
+    </span>
+  </label>
+</div>
 
 
-            </label>
-          </div>
+
+           
+          
 
           <!-- Error general -->
           <div class="register-error" *ngIf="registerError">

@@ -204,6 +204,22 @@ export class seleccionPaginas {
             }
           });
   }
+  
+  showDeactivateModal = false;
+
+openDeactivateModal(): void {
+  this.showDeactivateModal = true;
+}
+
+closeDeactivateModal(): void {
+  this.showDeactivateModal = false;
+}
+
+confirmDeactivation(): void {
+  this.showDeactivateModal = false;
+  this.onDeactivation(); // reutilizamos tu lógica existente
+}
+
 
   onGoToManual(): void {
     console.log('Ir al manual');

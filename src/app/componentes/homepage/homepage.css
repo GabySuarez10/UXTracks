@@ -531,6 +531,7 @@ p{
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
+    backdrop-filter: blur(8px);
   }
   
   .nav-links {

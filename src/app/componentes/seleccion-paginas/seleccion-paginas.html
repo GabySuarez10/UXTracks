@@ -14,9 +14,28 @@
         <button class="btn-logout" (click)="onLogout()">
           Cerrar sesión
         </button>
-        <button class="btn-deactivate" (click)="onDeactivation()">
-          Desactivar cuenta
-        </button>
+        <button class="btn-deactivate" (click)="openDeactivateModal()">
+  Desactivar cuenta
+</button>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="showDeactivateModal">
+  <div class="modal-container" role="dialog" aria-modal="true">
+    <h2 class="modal-title">¿Desactivar cuenta?</h2>
+    <p class="modal-text">
+      Esta acción es permanente y perderás el acceso a tu cuenta.
+      ¿Deseas continuar?
+    </p>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeDeactivateModal()">
+        Cancelar
+      </button>
+      <button class="btn-confirm" (click)="confirmDeactivation()">
+        Sí, desactivar
+      </button>
+    </div>
+  </div>
+</div>
       </div>
     </nav>
   </header>

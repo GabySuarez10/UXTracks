@@ -159,6 +159,111 @@
   border: 2px solid var(--color-secondary);
 }
 
+/* ===== Modal backdrop ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 1rem;
+}
+
+/* ===== Modal container ===== */
+.modal-container {
+  background: #ffffff;
+  border-radius: 1rem;
+  max-width: 420px;
+  width: 100%;
+  padding: 2rem 1.75rem;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.25s ease;
+}
+
+/* ===== Animación suave ===== */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Texto ===== */
+.modal-title {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal-text {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== Botones ===== */
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.btn-cancel,
+.btn-confirm {
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+/* Cancelar */
+.btn-cancel {
+  background: #e5e7eb;
+  color: #111;
+}
+
+.btn-cancel:hover {
+  background: #d1d5db;
+}
+
+/* Confirmar */
+.btn-confirm {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background: #b91c1c;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.35rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    width: 100%;
+  }
+}
+
 
 /* Main Content */
 .dashboard-main {
@@ -679,7 +784,9 @@
   opacity: 0.9;
 }
 
-/* Responsive */
+/* =========================
+   DESKTOP / LARGE
+   ========================= */
 @media (max-width: 1024px) {
   .sites-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -687,90 +794,140 @@
   }
 }
 
+/* =========================
+   TABLET (≤ 768px)
+   ========================= */
 @media (max-width: 768px) {
+
+  /* Navbar */
   .dashboard-navbar {
-    padding: 1rem;
+    padding: 0.75rem 1rem; /* más compacto */
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.75rem;
   }
-  
+
   .logo-dashboard {
-    font-size: 2rem;
+    font-size: 1.6rem; /* reduce protagonismo */
   }
-  
+
   .header-actions {
-    gap: 1rem;
+    gap: 0.75rem;
   }
-  
+
+  .header-actions button,
+  .header-actions a {
+    padding: 0.5rem 0.75rem; /* botones más bajos */
+    font-size: 0.85rem;
+    border-radius: 0.5rem;
+  }
+
+  /* Main */
   .dashboard-main {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
-  
+
+  /* Welcome */
   .welcome-section {
     flex-direction: column;
     padding: 1.5rem;
   }
-  
+
   .welcome-title {
-    font-size: 2rem;
+    font-size: 1.9rem;
   }
-  
+
   .welcome-subtitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
-  
+
+  /* Stats */
   .stats-summary {
     width: 100%;
     justify-content: space-around;
     gap: 1rem;
   }
-  
+
   .stat-item {
     flex-direction: column;
     text-align: center;
-    padding: 1rem;
+    padding: 0.9rem;
   }
-  
+
+  /* Section header */
   .section-header {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
-  
+
   .btn-add-site {
     width: 100%;
     justify-content: center;
   }
-  
+
   .sites-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .help-card {
     flex-direction: column;
     text-align: center;
   }
 }
 
+/* =========================
+   MOBILE (≤ 480px)
+   ========================= */
 @media (max-width: 480px) {
-  .welcome-title {
-    font-size: 1.75rem;
+
+  /* Navbar */
+  .dashboard-navbar {
+    padding: 0.75rem;
+    gap: 0.75rem;
   }
-  
+
+  .logo-dashboard {
+    font-size: 1.9rem;
+    text-align: center;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .header-actions button,
+  .header-actions a {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.8rem;
+    border-radius: 0.6rem;
+  }
+
+  /* Reduce agresividad visual del botón peligro */
+  .header-actions .btn-danger {
+    font-size: 0.75rem;
+  }
+
+  /* Welcome */
+  .welcome-title {
+    font-size: 1.7rem;
+  }
+
+  /* Cards */
   .site-icon {
     width: 60px;
     height: 60px;
     font-size: 2.5rem;
   }
-  
+
   .site-name {
     font-size: 1.3rem;
   }
-  
+
   .stats-summary {
     flex-direction: column;
   }
-  
+
   .stat-item {
     flex-direction: row;
     justify-content: center;

@@ -451,50 +451,67 @@
 
 /* Checkbox personalizado */
 
+/* Contenedor */
 .checkbox-wrapper {
   display: flex;
-  align-items: center;
+  align-items: baseline; /* 🔑 alineación correcta */
+  gap: 8px;
   cursor: pointer;
   font-size: 0.9rem;
   line-height: 1.4;
+  position: relative;
 }
 
+/* Input real (invisible pero funcional) */
 .checkbox-input {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
 }
 
+/* Checkbox visual */
 .checkbox-custom {
   width: 18px;
   height: 18px;
   border: 2px solid var(--color-gray-dark);
   border-radius: 3px;
-  margin-right: 0.75rem;
-  margin-top: 2px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
   flex-shrink: 0;
+  pointer-events: none;
 }
 
+/* Estado marcado */
 .checkbox-input:checked + .checkbox-custom {
   background-color: var(--color-secondary);
   border-color: var(--color-secondary);
 }
 
-.checkbox-input:checked + .checkbox-custom::after {
-  content: '✓';
-  color: var(--color-white);
-  font-size: 12px;
-  font-weight: bold;
+/* Check ✔ dibujado */
+.checkbox-custom::before {
+  content: '';
+  width: 5px;
+  height: 10px;
+  border: solid var(--color-white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s ease-in-out;
 }
 
+.checkbox-input:checked + .checkbox-custom::before {
+  transform: rotate(45deg) scale(1);
+}
+
+/* Texto */
 .checkbox-text {
   color: var(--color-primary);
-   display: inline;
- 
 }
 
+/* Links */
 .terms-link {
   background: none;
   border: none;
@@ -502,12 +519,15 @@
   cursor: pointer;
   text-decoration: underline;
   font-weight: 600;
-  transition: color var(--transition-fast);
+  transition: color 0.15s;
 }
 
 .terms-link:hover {
   color: var(--color-tertiary);
 }
+
+
+
 
 /* Botón de registro */
 .btn-register {
@@ -650,70 +670,137 @@
 }
 
 /* Responsive */
+/* =========================
+   TABLET (≤ 768px)
+   ========================= */
 @media (max-width: 768px) {
+
+  /* ===== Navbar ===== */
   .register-navbar {
-    padding: 0 1rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
   }
-  
+
+  .back-btn {
+    position: static; /* CLAVE */
+    justify-self: start;
+  }
+
+  .logo {
+    justify-self: center;
+  }
+
   .header-links {
+    justify-self: end;
     gap: 0.75rem;
     font-size: 0.9rem;
   }
-  
+
+  /* ===== Main ===== */
   .register-main {
     padding: 1rem;
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - 96px);
   }
-  
+
+  /* ===== Card ===== */
   .register-card {
-    padding: 2rem 1.5rem;
+    width: 100%;
+    padding: 1.75rem 1.5rem;
+    border-radius: 1.25rem;
   }
-  
+
+  .logo-card {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+
+  /* ===== Social ===== */
   .social-register {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
-  
+
+  /* ===== Checkbox ===== */
   .checkbox-wrapper {
     align-items: flex-start;
-  }
-  
-  .logo-card {
-    font-size: 2.5rem;
+    gap: 0.5rem;
   }
 }
 
+
+/* =========================
+   MOBILE (≤ 480px)
+   ========================= */
 @media (max-width: 480px) {
+
+  /* ===== Navbar ===== */
   .register-navbar {
-    justify-content: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    height: auto; /* sin alturas forzadas */
   }
-  
+
   .back-btn {
-    position: absolute;
-    left: 1rem;
+    position: static; /* NUNCA absolute */
+    justify-self: start;
   }
-  
+
+  .logo {
+    justify-self: center;
+  }
+
   .header-links {
     display: none;
   }
-  
+
+  /* ===== Main ===== */
+  .register-main {
+    padding: 0.75rem;
+  }
+
+  /* ===== Card ===== */
   .register-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 1rem;
   }
-  
+
   .logo-card {
-    font-size: 2rem;
+    font-size: 1.9rem;
+    text-align: center;
   }
-  
+
   .register-card-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    text-align: center;
   }
-  
+
+  .register-card-header p {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  /* ===== Inputs ===== */
+  .register-card input {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+
+  /* ===== Checkbox ===== */
+  .checkbox-wrapper {
+    gap: 0.5rem;
+  }
+
   .checkbox-text {
     font-size: 0.85rem;
+    line-height: 1.3;
   }
 }
+
 
 /* Animaciones */
 @keyframes slideInUp {

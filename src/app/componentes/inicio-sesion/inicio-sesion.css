@@ -590,32 +590,60 @@
   text-decoration: underline;
 }
 
-/* Responsive */
+/* =========================
+   TABLET (≤ 768px)
+   ========================= */
 @media (max-width: 768px) {
+
+  /* ===== Navbar ===== */
   .login-navbar {
-    padding: 0 1rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
   }
-  
+
+  .back-btn {
+    position: static; /* CLAVE: elimina superposición */
+    justify-self: start;
+  }
+
+  .logo {
+    justify-self: center;
+  }
+
   .header-links {
-    gap: 1rem;
+    justify-self: end;
+    gap: 0.75rem;
     font-size: 0.9rem;
   }
-  
+
+  /* ===== Main ===== */
   .login-main {
     padding: 1rem;
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - 96px);
   }
-  
+
+  /* ===== Card ===== */
   .login-card {
-    padding: 2rem 1.5rem;
+    width: 100%;
+    padding: 1.75rem 1.5rem;
+    border-radius: 1.25rem;
   }
-  
+
+  .logo-card {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+
+  /* ===== Social ===== */
   .social-login {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
-  
+
+  /* ===== Form options ===== */
   .form-options {
     flex-direction: column;
     align-items: flex-start;
@@ -623,28 +651,56 @@
   }
 }
 
+
+/* =========================
+   MOBILE (≤ 480px)
+   ========================= */
 @media (max-width: 480px) {
+
+  /* ===== Navbar ===== */
   .login-navbar {
-    justify-content: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    padding: 0.75rem 1rem;
   }
-  
+
   .back-btn {
-    position: absolute;
-    left: 1rem;
+    position: static; /* NUNCA absolute */
+    justify-self: start;
   }
-  
+
+  .logo {
+    justify-self: center;
+  }
+
   .header-links {
     display: none;
   }
-  
-  .login-card {
-    padding: 1.5rem;
+
+  /* ===== Main ===== */
+  .login-main {
+    padding: 0.75rem;
   }
-  
+
+  /* ===== Card ===== */
+  .login-card {
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+
   .logo-card {
-    font-size: 2.5rem;
+    font-size: 1.9rem;
+    text-align: center;
+  }
+
+  /* ===== Inputs ===== */
+  .login-card input {
+    font-size: 0.95rem;
+    padding: 0.75rem;
   }
 }
+
 /* Estados de validación en tiempo real */
 .form-input:valid {
   border-color: var(--color-success);

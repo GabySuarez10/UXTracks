@@ -59,6 +59,10 @@ throw new Error('Method not implemented.');
                 this.router.navigate(['/seleccion']);
               }
               console.log('Login exitoso');
+            } else{
+              this.isLoading = false;
+              this.loginError = 'Este usuario está inactivo. Por favor contactanos para reactivar tu cuenta. Contacto: uxtracksoporte@gmail.com';
+              this.authService.logout();
             }
           },
         error: (err) => {
@@ -70,7 +74,6 @@ throw new Error('Method not implemented.');
       this.markFormGroupTouched();
     }
   }
-
   onForgotPassword(): void {
     console.log('Forgot password clicked');
     // Navegar a página de recuperación de contraseña

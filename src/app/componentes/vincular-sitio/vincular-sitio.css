@@ -644,83 +644,142 @@
 }
 
 /* Responsive */
+/* =========================
+   TABLET (≤ 768px)
+   ========================= */
 @media (max-width: 768px) {
+
+  /* ===== Navbar ===== */
   .link-navbar {
-    padding: 1rem;
+    padding: 0.75rem 1rem; /* más compacto */
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.75rem;
   }
-  
+
   .logo-link {
-    font-size: 2rem;
+    font-size: 1.6rem; /* reduce protagonismo */
   }
-  
+
   .header-actions {
-    gap: 1rem;
+    gap: 0.75rem;
   }
-  
+
+  .header-actions button,
+  .header-actions a {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 0.5rem;
+  }
+
+  /* ===== Main ===== */
   .link-main {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
-  
+
+  /* ===== Form Card ===== */
   .form-card {
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.5rem;
   }
-  
+
   .form-header h1 {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
   }
-  
+
+  /* ===== Script ===== */
   .script-header {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
-  
+
   .btn-copy-inline {
     width: 100%;
     justify-content: center;
   }
-  
+
+  /* ===== ID Card ===== */
   .id-card {
     flex-direction: column;
     align-items: stretch;
     text-align: center;
+    gap: 0.5rem;
   }
-  
+
   .id-value {
     word-break: break-all;
+    font-size: 0.9rem;
   }
-  
+
+  /* ===== Info Cards ===== */
   .info-cards {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  
+
+  /* ===== Quick Links ===== */
   .quick-links {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .separator {
     display: none;
   }
-  
+
+  /* ===== Success ===== */
   .success-card {
     margin: 1rem;
-    padding: 2rem;
+    padding: 1.75rem;
   }
 }
 
+
+/* =========================
+   MOBILE (≤ 480px)
+   ========================= */
 @media (max-width: 480px) {
-  .form-card {
-    padding: 1.5rem;
+
+  /* ===== Navbar ===== */
+  .link-navbar {
+    padding: 0.75rem;
+    gap: 0.75rem;
   }
-  
+
+  .logo-link {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .header-actions button,
+  .header-actions a {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.8rem;
+    border-radius: 0.6rem;
+  }
+
+  /* ===== Form Card ===== */
+  .form-card {
+    padding: 1.25rem;
+  }
+
+  .form-header h1 {
+    font-size: 1.45rem;
+    text-align: center;
+  }
+
+  /* ===== Script ===== */
   .script-display code {
     font-size: 0.75rem;
+    line-height: 1.4;
   }
-  
+
+  /* ===== Back Button ===== */
   .btn-back {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
   }
 }
