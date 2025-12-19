@@ -8,8 +8,8 @@ import { IUser } from '../interfaces/user.interface';
     providedIn: 'root'
 })
 export class UserService {
-    private apiUrl = 'http://localhost:3000/rutas';
-  //private apiUrl: string = 'https://uxtapitemp.onrender.com/rutas';
+    //private apiUrl = 'http://localhost:3000/rutas';
+  private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     constructor(
         private httpClient: HttpClient

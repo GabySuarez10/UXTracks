@@ -9,8 +9,8 @@ import { IUserSite } from '../interfaces/user.site.interface';
     providedIn: 'root'
 })
 export class VisitasService {
-    private apiUrl = 'http://localhost:3000/rutas';
-  //private apiUrl: string = 'https://uxtapitemp.onrender.com/rutas';
+    //private apiUrl = 'http://localhost:3000/rutas';
+  private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     constructor(
         private httpClient: HttpClient

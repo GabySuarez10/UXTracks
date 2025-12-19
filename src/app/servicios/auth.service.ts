@@ -7,8 +7,8 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/rutas';
-  //private apiUrl: string = 'https://uxtapitemp.onrender.com/rutas';
+  //private apiUrl = 'http://localhost:3000/rutas';
+  private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
   private loggedIn = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router: Router) {

@@ -67,9 +67,9 @@ export class VincularSitio implements OnInit {
            Math.random().toString(36).substring(2, 15);
   }
 
-  // Actualizar script con el ID del sitio
+  // Mostrar script
   private updateScript(): void {
-    this.generatedScript = `<script src="https://cdn.uxtracks.com/uxtracks.js"></script>`;
+    this.generatedScript = `<script src="https://cdn.jsdelivr.net/gh/GabySuarez10/UXTscript/scriptPrueba.js"></script>`;
   }
 
   // Getter para el control del nombre
