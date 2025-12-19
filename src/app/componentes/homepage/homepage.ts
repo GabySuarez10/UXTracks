@@ -111,6 +111,7 @@ export class Homepage {
 
   onNavItemClick(item: any): void {
     console.log('Nav item clicked:', item.label);
+    this.router.navigate([item.link]);
     // Lógica para navegación
   }
 
