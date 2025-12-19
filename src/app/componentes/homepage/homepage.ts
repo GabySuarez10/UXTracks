@@ -50,12 +50,7 @@ export class Homepage {
       icon: '📊'
     }
   ];
-
-  navItems = [
-    { label: 'Manual de usuario', link: '#manual' },
-    { label: 'Registrarse', link: '/registro' }
-  ];
-
+  
   // Datos para el carrusel de "¿Cómo funciona?"
   currentSlide: number = 0;
   carouselImages: CarouselImage[] = [
@@ -113,6 +108,16 @@ export class Homepage {
     console.log('Nav item clicked:', item.label);
     this.router.navigate([item.link]);
     // Lógica para navegación
+  }
+   onBackToHome(): void {
+    console.log('Back to home clicked');
+    this.router.navigate(['/homepage']);
+  }
+  onRegister(event: Event): void {
+    console.log('Register clicked');
+      event.preventDefault()
+    // Navegar a página de registro
+     this.router.navigate(['/registro']);
   }
 
   // Métodos para el carrusel
