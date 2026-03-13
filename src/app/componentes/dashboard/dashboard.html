@@ -1,0 +1,240 @@
+<!-- dashboard.component.html -->
+
+<!-- MOBILE BACKDROP -->
+<div class="backdrop" [class.backdrop--visible]="sidebarOpen && isMobile" (click)="closeOnBackdrop()"></div>
+
+<!-- TOP NAV -->
+<header class="topbar">
+  <div class="topbar__left">
+    <!-- Hamburger: solo en mobile -->
+    <button class="hamburger" (click)="toggleSidebar()" aria-label="Abrir menú" [attr.aria-expanded]="sidebarOpen">
+      <span [class.open]="sidebarOpen"></span>
+      <span [class.open]="sidebarOpen"></span>
+      <span [class.open]="sidebarOpen"></span>
+    </button>
+    <div class="topbar__logo" (click)="goHome()" role="button" tabindex="0" aria-label="Ir al inicio">
+      <span class="logo-ux">UX</span><span class="logo-tracks">Tracks</span>
+    </div>
+  </div>
+  <nav class="topbar__nav" aria-label="Navegación principal">
+    <button class="header-link" (click)="onGoToManual()">
+          Manual de usuario
+        </button>
+    <button class="btn-logout" (click)="onLogout()">
+          Cerrar sesión
+        </button>
+  </nav>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" [class.sidebar--open]="sidebarOpen" aria-label="Menú lateral">
+    <div class="sidebar__header">
+      <span class="sidebar__title">Menú de opciones</span>
+    </div>
+
+    <nav class="sidebar__nav">
+      <ul role="list">
+
+        <li>
+          <button
+            class="sidebar__item"
+            [class.sidebar__item--active]="activeSection === 'dashboard'"
+            (click)="setSection('dashboard')"
+            [attr.aria-current]="activeSection === 'dashboard' ? 'page' : null">
+            <!-- Dashboard icon -->
+            <span class="sidebar__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+            </span>
+            <span class="sidebar__label">Dashboard</span>
+            <span class="sidebar__indicator" *ngIf="activeSection === 'dashboard'"></span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="sidebar__item"
+            [class.sidebar__item--active]="activeSection === 'heatmap'"
+            (click)="setSection('heatmap')"
+            [attr.aria-current]="activeSection === 'heatmap' ? 'page' : null">
+            <!-- Heatmap icon -->
+            <span class="sidebar__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity=".5"/><circle cx="12" cy="12" r="11" opacity=".2"/>
+              </svg>
+            </span>
+            <span class="sidebar__label">Mapas de calor</span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="sidebar__item"
+            [class.sidebar__item--active]="activeSection === 'feedbacks'"
+            (click)="setSection('feedbacks')"
+            [attr.aria-current]="activeSection === 'feedbacks' ? 'page' : null">
+            <!-- Feedback icon -->
+            <span class="sidebar__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            <span class="sidebar__label">Feedbacks</span>
+          </button>
+        </li>
+
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <section *ngIf="activeSection === 'dashboard'" class="section" aria-labelledby="dashboard-title">
+
+      <div class="section__header">
+        <div>
+          <h1 class="section__title" id="dashboard-title">Nombre del sitio</h1>
+          <p class="section__subtitle">Resumen de actividad del sitio vinculado</p>
+        </div>
+        <div class="section__badge">
+          <span class="badge badge--live">
+            <span class="badge__dot"></span>
+            En vivo
+          </span>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="cards" role="list" aria-label="Métricas principales">
+
+        <article class="card" role="listitem" *ngFor="let card of statCards; let i = index"
+                 [style.animation-delay]="i * 80 + 'ms'">
+          <div class="card__top">
+            <div class="card__icon" [attr.aria-hidden]="true">
+
+              <!-- Click icon -->
+              <svg *ngIf="card.icon === 'click'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 3H5a2 2 0 0 0-2 2v4"/><path d="M9 3h10a2 2 0 0 1 2 2v4"/>
+                <path d="M9 3v18"/><path d="M9 21H5a2 2 0 0 1-2-2v-4"/><path d="M9 21h10a2 2 0 0 0 2-2v-4"/><path d="M3 11h18"/>
+              </svg>
+
+              <!-- Scroll icon -->
+              <svg *ngIf="card.icon === 'scroll'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+              </svg>
+
+              <!-- Eye icon -->
+              <svg *ngIf="card.icon === 'eye'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+
+              <!-- Users icon -->
+              <svg *ngIf="card.icon === 'users'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+
+            </div>
+
+            <span class="card__trend" [class.card__trend--up]="card.trendUp" [class.card__trend--down]="!card.trendUp"
+                  [attr.aria-label]="'Tendencia: ' + card.trend">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline *ngIf="card.trendUp"  points="18 15 12 9 6 15"/>
+                <polyline *ngIf="!card.trendUp" points="6 9 12 15 18 9"/>
+              </svg>
+              {{ card.trend }}
+            </span>
+          </div>
+
+          <div class="card__body">
+            <span class="card__value" [attr.aria-label]="card.label + ': ' + displayStats[card.key]">
+              {{ displayStats[card.key] | number:'1.0-0' }}
+            </span>
+            <span class="card__label">{{ card.label }}</span>
+          </div>
+
+          <div class="card__progress" role="progressbar"
+               [attr.aria-valuenow]="barHeights[card.key]"
+               aria-valuemin="0" aria-valuemax="100">
+            <div class="card__progress-fill" [style.width.%]="barHeights[card.key]"></div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- BAR CHART -->
+      <div class="chart-wrapper" aria-label="Gráfico de métricas">
+        <div class="chart-header">
+          <h2 class="chart__title">Comparativa de métricas</h2>
+          <span class="chart__period">Últimos 30 días</span>
+        </div>
+
+        <div class="chart" role="img" aria-label="Gráfico de barras con métricas del sitio">
+          <div class="chart__yaxis" aria-hidden="true">
+            <span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span>
+          </div>
+
+          <div class="chart__bars">
+            <div class="chart__group"
+                 *ngFor="let bar of chartBars"
+                 (mouseenter)="showTooltip(bar)"
+                 (mouseleave)="hideTooltip(bar)"
+                 (focusin)="showTooltip(bar)"
+                 (focusout)="hideTooltip(bar)"
+                 tabindex="0"
+                 [attr.aria-label]="bar.sublabel + ': ' + bar.value">
+
+              <!-- Tooltip -->
+              <div class="chart__tooltip" [class.chart__tooltip--visible]="bar.tooltipVisible" role="tooltip">
+                <span class="tooltip__label">{{ bar.sublabel }}</span>
+                <span class="tooltip__value">{{ bar.value | number }}</span>
+              </div>
+
+              <div class="chart__bar-wrap">
+                <div class="chart__bar-fill" [style.height.%]="bar.height"></div>
+              </div>
+              <span class="chart__bar-label">{{ bar.label }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== MAPAS DE CALOR ===== -->
+    <section *ngIf="activeSection === 'heatmap'" class="section section--empty" aria-labelledby="heatmap-title">
+      <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity=".4"/><circle cx="12" cy="12" r="11" opacity=".2"/>
+          </svg>
+        </div>
+        <h1 class="empty-state__title" id="heatmap-title">Mapas de Calor</h1>
+        <p class="empty-state__desc">La visualización de mapas de calor estará disponible próximamente.</p>
+      </div>
+    </section>
+
+    <!-- ===== FEEDBACKS ===== -->
+    <section *ngIf="activeSection === 'feedbacks'" class="section section--empty" aria-labelledby="feedbacks-title">
+      <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <h1 class="empty-state__title" id="feedbacks-title">Feedbacks</h1>
+        <p class="empty-state__desc">El panel de feedbacks de usuarios estará disponible próximamente.</p>
+      </div>
+    </section>
+
+  </main>
+</div>

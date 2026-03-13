@@ -6,6 +6,7 @@ import { instruccionesInicio } from './componentes/instrucciones-inicio/instrucc
 import { VincularSitio } from './componentes/vincular-sitio/vincular-sitio';
 import { seleccionPaginas } from './componentes/seleccion-paginas/seleccion-paginas';
 import { AuthGuard } from './auth.guard';
+import { DashboardComponent } from './componentes/dashboard/dashboard';
 
 const routeConfig: Routes = [ 
   {
@@ -44,6 +45,12 @@ const routeConfig: Routes = [
     path: 'seleccion', // /registro
     component: seleccionPaginas,
     title: 'bienvenida',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'dashboard', // /registro
+    component: DashboardComponent,
+    title: 'metricas',
     canActivate: [AuthGuard],
   }
 
