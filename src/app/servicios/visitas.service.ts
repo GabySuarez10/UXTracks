@@ -9,8 +9,8 @@ import { IUserSite } from '../interfaces/user.site.interface';
     providedIn: 'root'
 })
 export class VisitasService {
-    private apiUrl = 'http://localhost:3000/rutas';
-    //private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
+    //private apiUrl = 'http://localhost:3000/rutas';
+    private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     constructor(
         private httpClient: HttpClient
@@ -36,7 +36,7 @@ export class VisitasService {
         let params = new HttpParams().set('url', url);
         if (startDate) params = params.set('startDate', startDate);
         if (endDate) params = params.set('endDate', endDate);
-        
+
         return this.httpClient.get<{ clics: any[], scrolls: any[] }>(`${this.apiUrl}/heatmaps`, { params }).pipe(
             catchError(error => {
                 console.error('Error al obtener datos del mapa de calor:', error);
@@ -60,7 +60,7 @@ export class VisitasService {
         let params = new HttpParams().set('url', url);
         if (startDate) params = params.set('startDate', startDate);
         if (endDate) params = params.set('endDate', endDate);
-        
+
         return this.httpClient.get<any>(`${this.apiUrl}/estadisticas`, { params }).pipe(
             map(res => ({
                 clicks: res.clics || 0,
