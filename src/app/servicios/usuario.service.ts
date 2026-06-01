@@ -8,8 +8,8 @@ import { IUser } from '../interfaces/user.interface';
     providedIn: 'root'
 })
 export class UserService {
-    //private apiUrl = 'http://localhost:3000/rutas';
-  private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
+    private apiUrl = 'http://localhost:3000/rutas';
+    //private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     constructor(
         private httpClient: HttpClient
@@ -19,7 +19,7 @@ export class UserService {
         return this.httpClient.get(`${this.apiUrl}/users/get/${name.replace(/\s/g, "-")}`).pipe(map(res => <IUser>res));
     }
 
-    updateUserData(userData: { avatar: number; nombreViejo: string; emailViejo: string; nombreNuevo: string; emailNuevo: string;}): Observable<any> {
+    updateUserData(userData: { avatar: number; nombreViejo: string; emailViejo: string; nombreNuevo: string; emailNuevo: string; }): Observable<any> {
         return this.httpClient.put(`${this.apiUrl}/user/update`, userData);
     }
 

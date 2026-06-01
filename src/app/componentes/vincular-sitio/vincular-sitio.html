@@ -6,7 +6,7 @@
       <a href="/" class="logo-link">
         <span class="ux-part">UX</span><span class="t-part">T</span><span class="racks-part">racks</span>
       </a>
-      
+
       <div class="header-actions">
         <a href="#manual" class="header-link">Manual de usuario</a>
         <button class="btn-logout" (click)="onLogout()">
@@ -39,9 +39,9 @@
       <div class="form-card" [class.blur]="showSuccess">
         <!-- Title Section -->
         <div class="form-header">
-          <h1>Vincula tu sitio web</h1>
+          <h1>Vincula tu página web</h1>
           <p class="form-subtitle">
-            Completa la información para comenzar a rastrear métricas en tu sitio
+            Completa la información para comenzar a rastrear métricas en tu página
           </p>
         </div>
 
@@ -50,18 +50,12 @@
           <!-- Site Name Field -->
           <div class="form-group">
             <label for="siteName" class="form-label">
-              Nombre del sitio web
+              Nombre de la página
               <span class="required-mark">*</span>
             </label>
-            <input
-              type="text"
-              id="siteName"
-              formControlName="siteName"
-              class="form-input"
-              [class.error]="siteName?.touched && siteName?.errors"
-              placeholder="Ej: Mi Tienda Online"
-              autocomplete="off"
-            />
+            <input type="text" id="siteName" formControlName="siteName" class="form-input"
+              [class.error]="siteName?.touched && siteName?.errors" placeholder="Ej: homepage de mi tienda"
+              autocomplete="off" />
             <div class="input-hint" *ngIf="!siteName?.touched || !siteName?.errors">
               Ingresa un nombre descriptivo para identificar tu sitio
             </div>
@@ -73,20 +67,14 @@
           <!-- Site URL Field -->
           <div class="form-group">
             <label for="siteUrl" class="form-label">
-              URL del sitio web
+              URL de la página
               <span class="required-mark">*</span>
             </label>
-            <input
-              type="text"
-              id="siteUrl"
-              formControlName="siteUrl"
-              class="form-input"
-              [class.error]="siteUrl?.touched && siteUrl?.errors"
-              placeholder="Ej: https://www.mitienda.com"
-              autocomplete="off"
-            />
+            <input type="text" id="siteUrl" formControlName="siteUrl" class="form-input"
+              [class.error]="siteUrl?.touched && siteUrl?.errors" placeholder="Ej: https://www.mitienda/homepage.com"
+              autocomplete="off" />
             <div class="input-hint" *ngIf="!siteUrl?.touched || !siteUrl?.errors">
-              Ingresa la URL completa de tu sitio web
+              Ingresa la URL completa de tu página
             </div>
             <div class="error-message" *ngIf="siteUrl?.touched && siteUrl?.errors">
               {{ getErrorMessage("siteUrl") }}
@@ -98,25 +86,17 @@
             <div class="script-header">
               <label class="form-label">
                 URL del script para añadir a las páginas
-                <span class="info-icon" title="Copia este script y pégalo antes de cerrar la etiqueta &lt;/body&gt;">ℹ️</span>
+                <span class="info-icon"
+                  title="Copia este script y pégalo antes de cerrar la etiqueta &lt;/body&gt;">ℹ️</span>
               </label>
-              <button 
-                type="button"
-                class="btn-copy-inline"
-                (click)="copyScript()"
-                [class.copied]="scriptCopied"
-              >
+              <button type="button" class="btn-copy-inline" (click)="copyScript()" [class.copied]="scriptCopied">
                 <span *ngIf="!scriptCopied">📋 Copiar</span>
                 <span *ngIf="scriptCopied">✅ Copiado</span>
               </button>
             </div>
 
-            <div 
-              class="script-display"
-              (click)="onScriptClick()"
-              [class.copied]="scriptCopied"
-              title="Click para copiar"
-            >
+            <div class="script-display" (click)="onScriptClick()" [class.copied]="scriptCopied"
+              title="Click para copiar">
               <code>{{ generatedScript }}</code>
             </div>
 
@@ -125,7 +105,8 @@
                 <span class="info-emoji">💡</span>
                 <div class="info-content">
                   <strong>¿Dónde colocar el script?</strong>
-                  <p>Pega este código justo antes de la etiqueta <code>&lt;/body&gt;</code> en cada página que desees rastrear.</p>
+                  <p>Pega este código justo antes de la etiqueta <code>&lt;/body&gt;</code> en cada página que desees
+                    rastrear.</p>
                 </div>
               </div>
             </div>
@@ -134,12 +115,8 @@
 
           <!-- Action Buttons -->
           <div class="form-actions">
-            <button
-              type="submit"
-              class="btn-finish"
-              [disabled]="!siteForm.valid || isLoading"
-              [class.loading]="isLoading"
-            >
+            <button type="submit" class="btn-finish" [disabled]="!siteForm.valid || isLoading"
+              [class.loading]="isLoading">
               <span *ngIf="!isLoading">Finalizar</span>
               <span *ngIf="isLoading" class="loading-spinner">
                 <span class="spinner"></span>
@@ -162,7 +139,8 @@
         <div class="info-card-secondary">
           <div class="card-icon">📊</div>
           <h3>Múltiples páginas</h3>
-          <p>Puedes usar el mismo script en todas las páginas de tu sitio. Las métricas se consolidarán automáticamente.</p>
+          <p>Puedes usar el mismo script en todas las páginas de tu sitio. Las métricas se consolidarán automáticamente.
+          </p>
         </div>
 
         <div class="info-card-secondary">
@@ -171,8 +149,8 @@
           <p>Una vez instalado el script, comenzarás a ver datos en tu dashboard en menos de 1 minuto.</p>
         </div>
       </div>
-        
-    
+
+
 
     </div>
 

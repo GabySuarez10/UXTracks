@@ -19,7 +19,7 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
 
-  register(userData: {username: string; email: string; password: string }): Observable<any> {
+  register(userData: { username: string; email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/users`, userData);
   }
 
@@ -34,10 +34,10 @@ export class AuthService {
       })
     );
   }
-  deactivateAccount(username:string): Observable<any> {
-      return this.http.put(`${this.apiUrl}/deactivate`, { nombre: username });
-    }
-    
+  deactivateAccount(username: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/deactivate`, { nombre: username });
+  }
+
 
   logout(): void {
     localStorage.removeItem('jwt_token');
@@ -52,15 +52,15 @@ export class AuthService {
     return localStorage.getItem('jwt_token');
   }
 
-  getUsername(): string | null{
+  getUsername(): string | null {
     return localStorage.getItem('username');
   }
 
-  getActive(): string | null{
+  getActive(): string | null {
     return localStorage.getItem('active');
   }
 
-  getFirstTime(): string | null{
+  getFirstTime(): string | null {
     return localStorage.getItem('firstTime');
   }
 
@@ -72,5 +72,17 @@ export class AuthService {
   public isTokenExpired(token: string): boolean {
     const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
     return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+  }
+
+  requestPasswordRecovery(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/recuperar-password`, { email });
+  }
+
+  verifyRecoveryCode(email: string, code: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verificar-codigo`, { email, code });
+  }
+
+  resetPassword(email: string, code: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/restablecer-password`, { email, code, newPassword });
   }
 }

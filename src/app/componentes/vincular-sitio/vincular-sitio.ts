@@ -21,7 +21,7 @@ export class VincularSitio implements OnInit {
   scriptCopied = false;
   isLoading = false;
   showSuccess = false;
-  
+
   // Datos del usuario (vendrían del servicio de autenticación)
   userId = 'USR_' + this.generateRandomId();
   siteId = '';
@@ -36,7 +36,7 @@ export class VincularSitio implements OnInit {
   ) {
     this.siteForm = this.formBuilder.group({
       siteName: ['', [
-        Validators.required, 
+        Validators.required,
         Validators.minLength(3),
         Validators.maxLength(100),
         Validators.pattern(/^[a-zA-Z0-9\s\-_.]+$/)
@@ -50,7 +50,7 @@ export class VincularSitio implements OnInit {
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   username = localStorage.getItem('username') || '';
-  
+
   ngOnInit(): void {
     this.generateSiteId();
     this.updateScript();
@@ -63,13 +63,13 @@ export class VincularSitio implements OnInit {
   }
 
   private generateRandomId(): string {
-    return Math.random().toString(36).substring(2, 15) + 
-           Math.random().toString(36).substring(2, 15);
+    return Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
   }
 
   // Mostrar script
   private updateScript(): void {
-    this.generatedScript = `<script src="https://cdn.jsdelivr.net/gh/GabySuarez10/UXTscript/scriptPrueba.js"></script>`;
+    this.generatedScript = `<script src="https://cdn.jsdelivr.net/gh/GabySuarez10/scriptUXT/scriptUXT.js"></script>`;
   }
 
   // Getter para el control del nombre
@@ -86,7 +86,7 @@ export class VincularSitio implements OnInit {
     navigator.clipboard.writeText(this.generatedScript).then(() => {
       this.scriptCopied = true;
       console.log('Script copiado al portapapeles');
-      
+
       // Resetear después de 3 segundos
       setTimeout(() => {
         this.scriptCopied = false;
@@ -105,7 +105,7 @@ export class VincularSitio implements OnInit {
     textArea.style.left = '-999999px';
     document.body.appendChild(textArea);
     textArea.select();
-    
+
     try {
       document.execCommand('copy');
       this.scriptCopied = true;
@@ -116,7 +116,7 @@ export class VincularSitio implements OnInit {
       console.error('Fallback: Error al copiar', err);
       alert('No se pudo copiar el script. Por favor, cópialo manualmente.');
     }
-    
+
     document.body.removeChild(textArea);
   }
 
@@ -151,19 +151,19 @@ export class VincularSitio implements OnInit {
   onFinish(): void {
     if (this.siteForm.valid) {
       this.isLoading = true;
-      this.siteService.addSite({username: this.username, title: this.siteName?.value, url: this.siteUrl?.value})
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: () => {
-              this.isLoading = false;
-              console.log('Sitio vinculado exitosamente');
-              this.router.navigate(['/seleccion']);
+      this.siteService.addSite({ username: this.username, title: this.siteName?.value, url: this.siteUrl?.value })
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: () => {
+            this.isLoading = false;
+            console.log('Sitio vinculado exitosamente');
+            this.router.navigate(['/seleccion']);
           },
-        error: (err) => {
+          error: (err) => {
             this.isLoading = false;
             console.log(err.error?.message || 'Error vinculando sitio');
-        }
-      });
+          }
+        });
     } else {
       this.siteName?.markAsTouched();
     }

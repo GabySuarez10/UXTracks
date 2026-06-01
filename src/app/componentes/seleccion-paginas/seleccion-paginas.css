@@ -243,24 +243,42 @@
 .btn-confirm:hover {
   background: #b91c1c;
 }
-/* =========================
-   Botón eliminar sitio
-   ========================= */
-.btn-delete-site {
-  margin-top: 0.75rem;
-  background: transparent;
-  color: #dc2626;
-  border: 1px solid #dc2626;
-  padding: 0.4rem 0.75rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
+.btn-delete-site-corner {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gray-medium);
+  color: var(--color-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  z-index: 10;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.btn-delete-site:hover {
-  background: #dc2626;
+.btn-delete-site-corner:hover {
+  background: var(--color-danger);
   color: #fff;
+  border-color: var(--color-danger);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+}
+
+.site-card:hover .btn-delete-site-corner {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.site-card:hover .btn-delete-site-corner:hover {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
 }
 
 /* =========================
@@ -780,7 +798,7 @@
   font-size: 1.25rem;
   font-weight: 700;
 }
-*/
+
 /* Empty State */
 .empty-state {
   text-align: center;

@@ -1,0 +1,68 @@
+﻿node.exe : [1m[33m[base
+line-browser-mapping] 
+The data in this module 
+is over two months old.  
+To ensure accurate 
+Baseline data, please 
+update: `npm i baseline-b
+rowser-mapping@latest 
+-D`[39m[22m
+En C:\Users\Migue\AppData
+\Roaming\npm\ng.ps1: 24 
+Carácter: 5
++     & "node$exe"  "$bas
+edir/node_modules/@angula
+r/cli/bin/ng.js" $arg ...
++     ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo       
+       : NotSpecified:   
+  ([1m[33m[basel...t   
+  -D`[39m[22m:Strin    
+g) [], RemoteExcepti    
+on
+    + FullyQualifiedErro 
+   rId : NativeCommandE  
+  rror
+ 
+[33mÔØ»[39m Building...
+[32mÔ£ö[39m Building...
+Application bundle generation failed. [3.869 seconds] - 2026-04-30T21:50:18.112Z
+
+[1m[31m[31mX [41;31m[
+[41;97mERROR[41;31m][0
+m [1mTS2339: Property 
+'color' does not exist 
+on type 
+'LineSeriesConfig'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/componentes/d
+ashboard/dashboard.html:2
+79:67:
+[37m      279 Ôöé ...v 
+class="trend-card__dot" [
+style.background]="serie.
+[32mcolor[37m"></div>
+          ÔòÁ            
+                         
+                   
+[32m~~~~~[0m
+
+  Error occurs in the 
+template of component 
+DashboardComponent.
+
+    src/app/componentes/d
+ashboard/dashboard.ts:61:
+15:
+[37m      61 Ôöé   
+templateUrl: [32m'./dash
+board.html'[37m,
+         ÔòÁ             
+   [32m~~~~~~~~~~~~~~~~~
+~[0m
+
+[39m[22m

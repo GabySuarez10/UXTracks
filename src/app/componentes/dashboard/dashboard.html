@@ -6,23 +6,19 @@
 <!-- TOP NAV -->
 <header class="topbar">
   <div class="topbar__left">
-    <!-- Hamburger: solo en mobile -->
     <button class="hamburger" (click)="toggleSidebar()" aria-label="Abrir menú" [attr.aria-expanded]="sidebarOpen">
       <span [class.open]="sidebarOpen"></span>
       <span [class.open]="sidebarOpen"></span>
       <span [class.open]="sidebarOpen"></span>
     </button>
     <div class="topbar__logo" (click)="goHome()" role="button" tabindex="0" aria-label="Ir al inicio">
-      <span class="logo-ux">UX</span><span class="logo-tracks">Tracks</span>
+      <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span
+        class="racks-part">racks</span>
     </div>
   </div>
   <nav class="topbar__nav" aria-label="Navegación principal">
-    <button class="header-link" (click)="onGoToManual()">
-          Manual de usuario
-        </button>
-    <button class="btn-logout" (click)="onLogout()">
-          Cerrar sesión
-        </button>
+    <a href="#" class="topbar__link">Manual de usuario</a>
+    <a href="#" class="topbar__btn">Cerrar sesión</a>
   </nav>
 </header>
 
@@ -33,172 +29,235 @@
     <div class="sidebar__header">
       <span class="sidebar__title">Menú de opciones</span>
     </div>
-
     <nav class="sidebar__nav">
       <ul role="list">
-
         <li>
-          <button
-            class="sidebar__item"
-            [class.sidebar__item--active]="activeSection === 'dashboard'"
-            (click)="setSection('dashboard')"
-            [attr.aria-current]="activeSection === 'dashboard' ? 'page' : null">
-            <!-- Dashboard icon -->
+          <button class="sidebar__item sidebar__item--switch" (click)="goToSeleccion()" aria-label="Cambiar sitio web">
             <span class="sidebar__icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9" />
+                <polyline points="9 21 3 21 3 15" />
+                <line x1="21" y1="3" x2="14" y2="10" />
+                <line x1="3" y1="21" x2="10" y2="14" />
+              </svg>
+            </span>
+            <span class="sidebar__label">Cambiar de página</span>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar__item" [class.sidebar__item--active]="activeSection === 'dashboard'"
+            (click)="setSection('dashboard')" [attr.aria-current]="activeSection === 'dashboard' ? 'page' : null">
+            <span class="sidebar__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
               </svg>
             </span>
             <span class="sidebar__label">Dashboard</span>
             <span class="sidebar__indicator" *ngIf="activeSection === 'dashboard'"></span>
           </button>
         </li>
-
         <li>
-          <button
-            class="sidebar__item"
-            [class.sidebar__item--active]="activeSection === 'heatmap'"
-            (click)="setSection('heatmap')"
-            [attr.aria-current]="activeSection === 'heatmap' ? 'page' : null">
-            <!-- Heatmap icon -->
+          <button class="sidebar__item" [class.sidebar__item--active]="activeSection === 'heatmap'"
+            (click)="setSection('heatmap')" [attr.aria-current]="activeSection === 'heatmap' ? 'page' : null">
             <span class="sidebar__icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity=".5"/><circle cx="12" cy="12" r="11" opacity=".2"/>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <circle cx="12" cy="12" r="7" opacity=".5" />
+                <circle cx="12" cy="12" r="11" opacity=".2" />
               </svg>
             </span>
             <span class="sidebar__label">Mapas de calor</span>
           </button>
         </li>
-
         <li>
-          <button
-            class="sidebar__item"
-            [class.sidebar__item--active]="activeSection === 'feedbacks'"
-            (click)="setSection('feedbacks')"
-            [attr.aria-current]="activeSection === 'feedbacks' ? 'page' : null">
-            <!-- Feedback icon -->
+          <button class="sidebar__item" [class.sidebar__item--active]="activeSection === 'feedbacks'"
+            (click)="setSection('feedbacks')" [attr.aria-current]="activeSection === 'feedbacks' ? 'page' : null">
             <span class="sidebar__icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
             </span>
             <span class="sidebar__label">Feedbacks</span>
           </button>
         </li>
-
       </ul>
     </nav>
+    <div class="sidebar__footer">
+      <button class="sidebar__item sidebar__item--switch" (click)="openAccountModal()" aria-label="Opciones de cuenta">
+        <span class="sidebar__icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </span>
+        <span class="sidebar__label">Opciones de Cuenta</span>
+      </button>
+    </div>
   </aside>
 
   <!-- MAIN -->
   <main class="main" id="main-content">
 
     <!-- ===== DASHBOARD ===== -->
-    <section *ngIf="activeSection === 'dashboard'" class="section" aria-labelledby="dashboard-title">
+    <section *ngIf="activeSection === 'dashboard'" class="section" id="dashboard-content"
+      aria-labelledby="dashboard-title">
 
-      <div class="section__header">
-        <div>
-          <h1 class="section__title" id="dashboard-title">Nombre del sitio</h1>
-          <p class="section__subtitle">Resumen de actividad del sitio vinculado</p>
-        </div>
-        <div class="section__badge">
-          <span class="badge badge--live">
-            <span class="badge__dot"></span>
-            En vivo
-          </span>
-        </div>
+      <!-- EXPORT LOGO HEADER (Visible only during PDF generation) -->
+      <div class="pdf-logo-header" *ngIf="isExporting">
+        <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span
+          class="racks-part">racks</span>
       </div>
 
-      <!-- STAT CARDS -->
-      <div class="cards" role="list" aria-label="Métricas principales">
+      <!-- HEADER -->
+      <div class="section__header">
+        <div>
+          <h1 class="section__title" id="dashboard-title">{{ currentSiteTitle || 'Dashboard' }}</h1>
+          <p class="section__subtitle">Resumen de actividad de {{ currentSiteUrl }}</p>
+        </div>
+        <button class="export-btn" (click)="downloadReport()" [disabled]="isExporting" data-html2canvas-ignore="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span>{{ isExporting ? 'Generando...' : 'Descargar Reporte' }}</span>
+        </button>
+      </div>
+      <!-- FILTRO GLOBAL DE FECHAS -->
+      <div class="date-filter" role="group" aria-label="Filtro de período">
+        <div class="date-filter__pills">
+          <button class="date-filter__pill" [class.date-filter__pill--active]="activeFilter === 'last7'"
+            (click)="setFilter('last7')" aria-pressed="activeFilter === 'last7'">
+            Últimos 7 días
+          </button>
+          <button class="date-filter__pill" [class.date-filter__pill--active]="activeFilter === 'last30'"
+            (click)="setFilter('last30')" aria-pressed="activeFilter === 'last30'">
+            Últimos 30 días
+          </button>
+          <button class="date-filter__pill" [class.date-filter__pill--active]="activeFilter === 'custom'"
+            (click)="setFilter('custom')" aria-pressed="activeFilter === 'custom'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Personalizado
+          </button>
+        </div>
 
-        <article class="card" role="listitem" *ngFor="let card of statCards; let i = index"
-                 [style.animation-delay]="i * 80 + 'ms'">
-          <div class="card__top">
-            <div class="card__icon" [attr.aria-hidden]="true">
-
-              <!-- Click icon -->
-              <svg *ngIf="card.icon === 'click'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 3H5a2 2 0 0 0-2 2v4"/><path d="M9 3h10a2 2 0 0 1 2 2v4"/>
-                <path d="M9 3v18"/><path d="M9 21H5a2 2 0 0 1-2-2v-4"/><path d="M9 21h10a2 2 0 0 0 2-2v-4"/><path d="M3 11h18"/>
-              </svg>
-
-              <!-- Scroll icon -->
-              <svg *ngIf="card.icon === 'scroll'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-                <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-              </svg>
-
-              <!-- Eye icon -->
-              <svg *ngIf="card.icon === 'eye'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-
-              <!-- Users icon -->
-              <svg *ngIf="card.icon === 'users'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-
+        <!-- Picker de rango personalizado -->
+        <div class="date-filter__picker" *ngIf="showCustomPicker" role="group" aria-label="Rango personalizado">
+          <div class="date-filter__inputs">
+            <div class="date-input-wrap">
+              <label class="date-input__label" for="dateFrom">Desde</label>
+              <input id="dateFrom" type="date" class="date-input" [(ngModel)]="customDateFrom"
+                [max]="customDateTo || ''" aria-label="Fecha de inicio" />
             </div>
-
-            <span class="card__trend" [class.card__trend--up]="card.trendUp" [class.card__trend--down]="!card.trendUp"
-                  [attr.aria-label]="'Tendencia: ' + card.trend">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                <polyline *ngIf="card.trendUp"  points="18 15 12 9 6 15"/>
-                <polyline *ngIf="!card.trendUp" points="6 9 12 15 18 9"/>
-              </svg>
-              {{ card.trend }}
-            </span>
+            <span class="date-filter__sep" aria-hidden="true">→</span>
+            <div class="date-input-wrap">
+              <label class="date-input__label" for="dateTo">Hasta</label>
+              <input id="dateTo" type="date" class="date-input" [(ngModel)]="customDateTo" [min]="customDateFrom || ''"
+                aria-label="Fecha de fin" />
+            </div>
+            <button class="date-filter__apply" (click)="applyCustomRange()"
+              [disabled]="!customDateFrom || !customDateTo" aria-label="Aplicar rango de fechas">
+              Aplicar
+            </button>
           </div>
+        </div>
 
+        <!-- Indicador del rango activo -->
+        <span class="date-filter__active-label" aria-live="polite">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          Mostrando: <strong>{{ filterLabel }}</strong>
+          <ng-container *ngIf="activeFilter === 'custom' && customDateFrom && customDateTo">
+            &nbsp;({{ customDateFrom }} → {{ customDateTo }})
+          </ng-container>
+        </span>
+      </div>
+
+      <!-- ── BLOQUE 1: Tarjetas principales ── -->
+      <div class="cards" role="list" aria-label="Métricas principales">
+        <article class="card" role="listitem" *ngFor="let card of statCards; let i = index"
+          [style.animation-delay]="i * 80 + 'ms'">
+          <div class="card__top">
+            <div class="card__icon" aria-hidden="true">
+              <svg *ngIf="card.icon === 'click'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 3H5a2 2 0 0 0-2 2v4" />
+                <path d="M9 3h10a2 2 0 0 1 2 2v4" />
+                <path d="M9 3v18" />
+                <path d="M9 21H5a2 2 0 0 1-2-2v-4" />
+                <path d="M9 21h10a2 2 0 0 0 2-2v-4" />
+                <path d="M3 11h18" />
+              </svg>
+              <svg *ngIf="card.icon === 'scroll'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 1 21 5 17 9" />
+                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                <polyline points="7 23 3 19 7 15" />
+                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+              </svg>
+              <svg *ngIf="card.icon === 'eye'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <svg *ngIf="card.icon === 'users'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+          </div>
           <div class="card__body">
-            <span class="card__value" [attr.aria-label]="card.label + ': ' + displayStats[card.key]">
-              {{ displayStats[card.key] | number:'1.0-0' }}
-            </span>
+            <span class="card__value">{{ displayStats[card.key] | number:'1.0-0' }}</span>
             <span class="card__label">{{ card.label }}</span>
           </div>
-
-          <div class="card__progress" role="progressbar"
-               [attr.aria-valuenow]="barHeights[card.key]"
-               aria-valuemin="0" aria-valuemax="100">
+          <div class="card__progress" role="progressbar" [attr.aria-valuenow]="barHeights[card.key]" aria-valuemin="0"
+            aria-valuemax="100">
             <div class="card__progress-fill" [style.width.%]="barHeights[card.key]"></div>
           </div>
         </article>
-
       </div>
 
-      <!-- BAR CHART -->
+      <!-- ── BLOQUE 2: Gráfico de barras comparativo ── -->
       <div class="chart-wrapper" aria-label="Gráfico de métricas">
         <div class="chart-header">
           <h2 class="chart__title">Comparativa de métricas</h2>
-          <span class="chart__period">Últimos 30 días</span>
+          <span class="chart__period">{{ filterLabel }}</span>
         </div>
-
         <div class="chart" role="img" aria-label="Gráfico de barras con métricas del sitio">
           <div class="chart__yaxis" aria-hidden="true">
             <span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span>
           </div>
-
           <div class="chart__bars">
-            <div class="chart__group"
-                 *ngFor="let bar of chartBars"
-                 (mouseenter)="showTooltip(bar)"
-                 (mouseleave)="hideTooltip(bar)"
-                 (focusin)="showTooltip(bar)"
-                 (focusout)="hideTooltip(bar)"
-                 tabindex="0"
-                 [attr.aria-label]="bar.sublabel + ': ' + bar.value">
-
-              <!-- Tooltip -->
+            <div class="chart__group" *ngFor="let bar of chartBars" (mouseenter)="showTooltip(bar)"
+              (mouseleave)="hideTooltip(bar)" (focusin)="showTooltip(bar)" (focusout)="hideTooltip(bar)" tabindex="0"
+              [attr.aria-label]="bar.sublabel + ': ' + bar.value">
               <div class="chart__tooltip" [class.chart__tooltip--visible]="bar.tooltipVisible" role="tooltip">
                 <span class="tooltip__label">{{ bar.sublabel }}</span>
                 <span class="tooltip__value">{{ bar.value | number }}</span>
               </div>
-
               <div class="chart__bar-wrap">
                 <div class="chart__bar-fill" [style.height.%]="bar.height"></div>
               </div>
@@ -208,19 +267,114 @@
         </div>
       </div>
 
-    </section>
+      <!-- ══════════════════════════════════════════
+           BLOQUE 3: TENDENCIAS EN TIEMPO (líneas)
+      ══════════════════════════════════════════ -->
+      <div class="section-divider">
+        <span class="section-divider__label">Tendencias en el tiempo</span>
+      </div>
+
+      <div class="trend-grid">
+        <div class="trend-card" *ngFor="let serie of trendSeries; let si = index"
+          [style.animation-delay]="si * 100 + 'ms'">
+
+          <div class="trend-card__header">
+            <div class="trend-card__dot" [style.background]="serie.color"></div>
+            <h3 class="trend-card__title">{{ serie.title }}</h3>
+            <span class="trend-card__period">{{ filterLabel }}</span>
+          </div>
+
+          <!-- CHART.JS CANVAS -->
+          <div class="trend-chart-wrap" style="height: 140px; position: relative; width: 100%;">
+            <canvas baseChart [type]="'line'" [data]="serie.chartData" [options]="serie.chartOptions">
+            </canvas>
+          </div>
+
+          <!-- Mini stat debajo -->
+          <div class="trend-card__foot">
+            <span class="trend-card__last">Último: <strong>{{ serie.lastValue | number }}</strong></span>
+            <span class="trend-card__max">Máx: <strong>{{ serie.maxValue | number }}</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           BLOQUE 4: MÉTRICAS POR USUARIO
+      ══════════════════════════════════════════ -->
+      <div class="section-divider">
+        <span class="section-divider__label">Métricas por usuario</span>
+      </div>
+
+      <div class="user-metrics-grid">
+
+        <!-- Card: promedio de clics por usuario -->
+        <article class="ucard" aria-label="Promedio de clics por usuario">
+          <div class="ucard__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 3H5a2 2 0 0 0-2 2v4" />
+              <path d="M9 3h10a2 2 0 0 1 2 2v4" />
+              <path d="M9 3v18" />
+              <path d="M9 21H5a2 2 0 0 1-2-2v-4" />
+              <path d="M9 21h10a2 2 0 0 0 2-2v-4" />
+              <path d="M3 11h18" />
+            </svg>
+          </div>
+          <div class="ucard__body">
+            <span class="ucard__value">{{ displayAvgClicks | number:'1.1-1' }}</span>
+            <span class="ucard__label">Promedio de clics por usuario</span>
+            <span class="ucard__hint">clics / sesión</span>
+          </div>
+          <div class="ucard__visual">
+            <div class="ucard__bar-track">
+              <div class="ucard__bar-fill" [style.width.%]="(avgClicksPerUser / 10) * 100"></div>
+            </div>
+            <span class="ucard__bar-caption">de 10 clics máx. esperados</span>
+          </div>
+        </article>
+
+        <!-- Card: porcentaje scroll promedio -->
+        <article class="ucard" aria-label="Porcentaje de scroll promedio">
+          <div class="ucard__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9" />
+              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+              <polyline points="7 23 3 19 7 15" />
+              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+            </svg>
+          </div>
+          <div class="ucard__body">
+            <div class="ucard__scroll-display">
+              <span class="ucard__value">{{ displayScrollPct }}%</span>
+              <span class="ucard__scroll-label">scroll promedio</span>
+            </div>
+            <span class="ucard__label">Porcentaje Scroll Promedio</span>
+            <span class="ucard__hint">profundidad de desplazamiento</span>
+          </div>
+          <div class="ucard__visual">
+            <!-- Indicador circular de scroll -->
+            <div class="scroll-ring" [attr.aria-valuenow]="displayScrollPct" aria-valuemin="0" aria-valuemax="100"
+              role="progressbar">
+              <svg width="72" height="72" viewBox="0 0 72 72" class="scroll-ring__svg">
+                <circle cx="36" cy="36" r="28" class="scroll-ring__track" />
+                <circle cx="36" cy="36" r="28" class="scroll-ring__fill" [style.stroke-dasharray]="'176 176'"
+                  [style.stroke-dashoffset]="176 - (displayScrollPct / 100) * 176" stroke="#148D8D" />
+              </svg>
+              <span class="scroll-ring__label">{{ displayScrollPct }}%</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+
+
+    </section><!-- /dashboard -->
 
     <!-- ===== MAPAS DE CALOR ===== -->
-    <section *ngIf="activeSection === 'heatmap'" class="section section--empty" aria-labelledby="heatmap-title">
-      <div class="empty-state">
-        <div class="empty-state__icon" aria-hidden="true">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity=".4"/><circle cx="12" cy="12" r="11" opacity=".2"/>
-          </svg>
-        </div>
-        <h1 class="empty-state__title" id="heatmap-title">Mapas de Calor</h1>
-        <p class="empty-state__desc">La visualización de mapas de calor estará disponible próximamente.</p>
-      </div>
+    <section *ngIf="activeSection === 'heatmap'" class="section" aria-labelledby="heatmap-title">
+      <app-heatmap [siteUrl]="currentSiteUrl"></app-heatmap>
     </section>
 
     <!-- ===== FEEDBACKS ===== -->
@@ -228,7 +382,7 @@
       <div class="empty-state">
         <div class="empty-state__icon" aria-hidden="true">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
         </div>
         <h1 class="empty-state__title" id="feedbacks-title">Feedbacks</h1>
@@ -237,4 +391,47 @@
     </section>
 
   </main>
+</div>
+
+<!-- MODAL: OPCIONES DE CUENTA -->
+<div class="modal-overlay" *ngIf="showAccountModal" (click)="closeAccountModal()" aria-modal="true" role="dialog">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">Opciones de Cuenta</h2>
+      <button class="modal-close" (click)="closeAccountModal()" aria-label="Cerrar modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">Gestione las preferencias de su cuenta de usuario.</p>
+      <div class="modal-options">
+        <button class="modal-btn modal-btn--danger" (click)="openDeactivateConfirm()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+            <line x1="12" y1="2" x2="12" y2="12"></line>
+          </svg>
+          Desactivar cuenta
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CONFIRMACIÓN DESACTIVACIÓN -->
+<div class="modal-overlay modal-overlay--warning" *ngIf="showDeactivateConfirm" (click)="closeDeactivateConfirm()"
+  aria-modal="true" role="dialog">
+  <div class="modal-content modal-content--small" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title modal-title--warning">¿Desactivar cuenta?</h2>
+    </div>
+    <div class="modal-body">
+      <p class="modal-text">
+        Esta acción es permanente y perderás el acceso a todas tus métricas y configuraciones.
+        <strong>¿Estás completamente seguro de que deseas continuar?</strong>
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--secondary" (click)="closeDeactivateConfirm()">Cancelar</button>
+        <button class="modal-btn modal-btn--danger-full" (click)="confirmDeactivation()">Sí, desactivar cuenta</button>
+      </div>
+    </div>
+  </div>
 </div>

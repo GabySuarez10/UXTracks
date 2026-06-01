@@ -75,9 +75,7 @@ throw new Error('Method not implemented.');
     }
   }
   onForgotPassword(): void {
-    console.log('Forgot password clicked');
-    // Navegar a página de recuperación de contraseña
-    // this.router.navigate(['/forgot-password']);
+    this.router.navigate(['/recuperar-password']);
   }
 
   onRegister(event: Event): void {

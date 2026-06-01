@@ -4,9 +4,10 @@
   <header class="dashboard-header">
     <nav class="dashboard-navbar">
       <a href="/" class="logo-dashboard">
-        <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span class="racks-part">racks</span>
+        <span class="u-part">U</span><span class="x-part">X</span><span class="t-part">T</span><span
+          class="racks-part">racks</span>
       </a>
-      
+
       <div class="header-actions">
         <button class="header-link" (click)="onGoToManual()">
           Manual de usuario
@@ -14,11 +15,11 @@
         <button class="btn-logout" (click)="onLogout()">
           Cerrar sesión
         </button>
-        <button class="btn-deactivate" (click)="openDeactivateModal()">
+        <!--<button class="btn-deactivate" (click)="openDeactivateModal()">
   Desactivar cuenta
 </button>
 
-<!-- Modal -->
+ Modal
 <div class="modal-backdrop" *ngIf="showDeactivateModal">
   <div class="modal-container" role="dialog" aria-modal="true">
     <h2 class="modal-title">¿Desactivar cuenta?</h2>
@@ -35,7 +36,7 @@
       </button>
     </div>
   </div>
-</div>
+</div> -->
       </div>
     </nav>
   </header>
@@ -47,7 +48,7 @@
       <div class="welcome-section">
         <div class="welcome-content">
           <h1 class="welcome-title">
-            <span class="greeting">{{ getGreeting() }}</span>, 
+            <span class="greeting">{{ getGreeting() }}</span>,
             <span class="user-name">{{ userName }}</span>! 👋
           </h1>
           <p class="welcome-subtitle">
@@ -80,7 +81,7 @@
           <h2>Páginas añadidas</h2>
           <button class="btn-add-site" (click)="onAddNewSite()">
             <span class="add-icon">+</span>
-            Añadir sitio web
+            Añadir página web
           </button>
         </div>
 
@@ -88,21 +89,27 @@
         <div class="loading-container" *ngIf="isLoading">
           <div class="loading-spinner-large">
             <div class="spinner-circle"></div>
-            <p>Cargando tus sitios web...</p>
+            <p>Cargando tus páginas web...</p>
           </div>
         </div>
 
         <!-- Sites Grid -->
         <div class="sites-grid" *ngIf="!isLoading && sitiosUsuario.length > 0">
-          <div 
-            *ngFor="let site of sitiosUsuario"
-            class="site-card"
-            [class.selected]="selectedSiteTitle === site.titulo"
-            [class.hovered]="hoveredSiteTitle === site.titulo"
-            (click)="onSelectSite(site)"
-            (mouseenter)="onMouseEnter(site.titulo)"
-            (mouseleave)="onMouseLeave()"
-          >
+          <div *ngFor="let site of sitiosUsuario" class="site-card" [class.selected]="selectedSiteTitle === site.titulo"
+            [class.hovered]="hoveredSiteTitle === site.titulo" (click)="onSelectSite(site)"
+            (mouseenter)="onMouseEnter(site.titulo)" (mouseleave)="onMouseLeave()">
+
+            <!-- Botón eliminar (Top Right) -->
+            <button class="btn-delete-site-corner" (click)="openDeleteSiteModal(site.url); $event.stopPropagation()"
+              title="Eliminar sitio" aria-label="Eliminar sitio">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+            </button>
 
             <!-- Card Body -->
             <div class="card-body">
@@ -131,16 +138,11 @@
                   <strong>{{ site.recurrentes}}</strong> recurrentes
                 </span>
               </div>
-              <button 
-               class="btn-delete-site"
-              (click)="openDeleteSiteModal(site.url); $event.stopPropagation()">
-               Eliminar sitio
-              </button>
             </div>
-            
+
 
             <!-- Click to view overlay -->
-            
+
             <div class="card-overlay">
               <div class="overlay-content">
                 <span class="overlay-icon">📊</span>
@@ -148,8 +150,8 @@
 
 
               </div>
-            </div> 
-        
+            </div>
+
           </div>
         </div>
 
@@ -170,35 +172,36 @@
         <div class="help-icon">💡</div>
         <div class="help-content">
           <h3>¿Necesitas ayuda?</h3>
-          <p>Consulta nuestro <button class="link-button" (click)="onGoToManual()">manual de usuario</button> para aprender a sacar el máximo provecho de UXTracks.</p>
+          <p>Consulta nuestro <button class="link-button" (click)="onGoToManual()">manual de usuario</button> para
+            aprender a sacar el máximo provecho de UXTracks.</p>
         </div>
       </div>
     </div>
     <!-- Modal eliminar sitio -->
     <div class="modal-backdrop" *ngIf="showDeleteSiteModal">
-  <div class="modal-container" role="dialog" aria-modal="true">
-    
-    <h2 class="modal-title">¿Eliminar sitio web?</h2>
+      <div class="modal-container" role="dialog" aria-modal="true">
 
-    <p class="modal-text">
-      Esta acción eliminará el sitio y sus métricas asociadas.
-      ¿Deseas continuar?
-    </p>
+        <h2 class="modal-title">¿Eliminar sitio web?</h2>
 
-    <div class="modal-actions">
-      <button class="btn-cancel" (click)="closeDeleteSiteModal()">
-        Cancelar
-      </button>
+        <p class="modal-text">
+          Esta acción eliminará el sitio y sus métricas asociadas.
+          ¿Deseas continuar?
+        </p>
 
-      <button class="btn-confirm" (click)="confirmDeleteSite()">
-        Sí, eliminar
-      </button>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeDeleteSiteModal()">
+            Cancelar
+          </button>
+
+          <button class="btn-confirm" (click)="confirmDeleteSite()">
+            Sí, eliminar
+          </button>
+        </div>
+
+      </div>
     </div>
 
-  </div>
-</div>
-
-  </main>  
+  </main>
 
   <!-- Footer -->
   <footer class="dashboard-footer">

@@ -126,8 +126,8 @@ export class seleccionPaginas {
   // Ir a las métricas del sitio
   goToMetrics(site: IUserSite): void {
     console.log('Ir a métricas de:', site.titulo);
-    // Navegar a la página de métricas
-    // this.router.navigate(['/dashboard/metrics', site.id]);
+    // Navegar al dashboard pasando los datos por query param
+    this.router.navigate(['/dashboard'], { queryParams: { siteUrl: site.url, siteTitle: site.titulo } });
   }
 
   restar5HorasCompleta(fechaStr: string): string {

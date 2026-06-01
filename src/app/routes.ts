@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Homepage } from './componentes/homepage/homepage';
 import { InicioSesion } from './componentes/inicio-sesion/inicio-sesion';
 import { Registro } from './componentes/registrarse/registrarse';
+import { RecuperarPassword } from './componentes/recuperar-password/recuperar-password';
 import { instruccionesInicio } from './componentes/instrucciones-inicio/instrucciones-inicio';
 import { VincularSitio } from './componentes/vincular-sitio/vincular-sitio';
 import { seleccionPaginas } from './componentes/seleccion-paginas/seleccion-paginas';
@@ -28,6 +29,11 @@ const routeConfig: Routes = [
     path: 'registro', // /registro
     component: Registro,
     title: 'registro',
+  },
+  {
+    path: 'recuperar-password', // /recuperar-password
+    component: RecuperarPassword,
+    title: 'Recuperar contraseña',
   },
   {
     path: 'instrucciones', // /instrucciones

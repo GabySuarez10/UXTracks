@@ -32,16 +32,16 @@ export class Homepage {
     {
       title: 'Análisis de Clics y scrolls',
       description: 'Rastrea y analiza todos los clicks y scrolls de tus usuarios para entender mejor su comportamiento.',
-      icon: '👆'
+      icon: '🖱️'
     },
     {
       title: 'Mapas de Calor',
       description: 'Visualiza las áreas más populares de tu sitio web con mapas de calor interactivos.',
-      icon: '🔥'
+      icon: '📈'
     },
     {
       title: 'Feedback Inteligente',
-      description: 'Recibe retroalimentación automática e inteligente basada en el comportamiento del usuario.',
+      description: 'Recibe retroalimentación inteligente basada en el comportamiento del usuario.',
       icon: '🧠'
     },
     {
@@ -58,7 +58,7 @@ export class Homepage {
       id: 1,
       title: 'Script de Integración',
       description: 'Instalación simple con una línea de código',
-      image: '📈',
+      image: '📋',
       alt: 'Dashboard con métricas'
     },
     {
