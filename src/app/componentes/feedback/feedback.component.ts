@@ -10,6 +10,7 @@ import { VisitasService } from '../../servicios/visitas.service';
   styleUrls: ['./feedback.component.css']
 })
 export class FeedbackComponent implements OnChanges {
+
   @Input() siteUrl: string = '';
 
   feedbacks: any[] = [];
@@ -19,6 +20,7 @@ export class FeedbackComponent implements OnChanges {
   satisfechoCount = 0;
   neutralCount = 0;
   insatisfechoCount = 0;
+
   totalCount = 0;
 
   satisfechoPercent = 0;
@@ -27,7 +29,7 @@ export class FeedbackComponent implements OnChanges {
 
   filteredComments: any[] = [];
 
-  constructor(private visitasService: VisitasService) {}
+  constructor(private visitasService: VisitasService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['siteUrl'] && this.siteUrl) {
@@ -38,9 +40,10 @@ export class FeedbackComponent implements OnChanges {
   loadFeedbacks() {
     this.loading = true;
     this.error = '';
+
     this.visitasService.getFeedbacks(this.siteUrl).subscribe({
       next: (data) => {
-        this.feedbacks = data;
+        this.feedbacks = data || [];
         this.calculateStats();
         this.loading = false;
       },
@@ -52,6 +55,10 @@ export class FeedbackComponent implements OnChanges {
     });
   }
 
+  private normalizeResponse(value: string): string {
+    return (value || '').toLowerCase().trim();
+  }
+
   calculateStats() {
     this.satisfechoCount = 0;
     this.neutralCount = 0;
@@ -59,11 +66,19 @@ export class FeedbackComponent implements OnChanges {
     this.filteredComments = [];
 
     this.feedbacks.forEach(f => {
-      if (f.response === 'satisfecho') {
+
+      const response = this.normalizeResponse(f.response);
+
+      if (response === 'satisfecho') {
         this.satisfechoCount++;
-      } else if (f.response === 'neutral') {
+      }
+      else if (response === 'neutral') {
         this.neutralCount++;
-      } else if (f.response === 'insatisfecho') {
+      }
+      else if (
+        response === 'insatisfecho' ||
+        response === 'insatisfactorio'
+      ) {
         this.insatisfechoCount++;
       }
 
@@ -86,19 +101,23 @@ export class FeedbackComponent implements OnChanges {
   }
 
   getEmoji(response: string): string {
-    switch (response) {
+    switch (this.normalizeResponse(response)) {
       case 'satisfecho': return '😊';
       case 'neutral': return '😐';
-      case 'insatisfecho': return '😞';
+      case 'insatisfecho':
+      case 'insatisfactorio':
+        return '😞';
       default: return '💬';
     }
   }
 
   getResponseLabel(response: string): string {
-    switch (response) {
+    switch (this.normalizeResponse(response)) {
       case 'satisfecho': return 'Satisfecho';
       case 'neutral': return 'Neutral';
-      case 'insatisfecho': return 'Insatisfecho';
+      case 'insatisfecho':
+      case 'insatisfactorio':
+        return 'Insatisfecho';
       default: return response;
     }
   }

@@ -376,37 +376,112 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   }
 
   renderHeatmap() {
+
     if (!this.heatmapInstance) return;
+
+    // Limpiar heatmap anterior
+    this.heatmapInstance.setData({
+      max: 1,
+      data: []
+    });
 
     const points: any[] = [];
     let max = 1;
 
-    if (this.viewMode === 'clics' && this.rawData.clics) {
+    // Escala dinámica basada en screenshot actual
+    const scaleFactor =
+      this.containerWidth / HEATMAP_WIDTH;
+
+    // =========================
+    // CLICS
+    // =========================
+    if (
+      this.viewMode === 'clics' &&
+      this.rawData.clics
+    ) {
+
       this.rawData.clics.forEach((clic: any) => {
-        if (clic.posicion_x != null && clic.posicion_y != null) {
-          points.push({
-            x: Math.round(Number(clic.posicion_x)),
-            y: Math.round(Number(clic.posicion_y)),
-            value: 1
-          });
+
+        if (
+          clic.posicion_x != null &&
+          clic.posicion_y != null
+        ) {
+
+          const scaledX =
+            Number(clic.posicion_x) * scaleFactor;
+
+          const scaledY =
+            Number(clic.posicion_y) * scaleFactor;
+
+          // Ignorar puntos fuera del canvas
+          if (
+            scaledX >= 0 &&
+            scaledY >= 0 &&
+            scaledX <= this.containerWidth &&
+            scaledY <= this.containerHeight
+          ) {
+
+            points.push({
+              x: Math.round(scaledX),
+              y: Math.round(scaledY),
+              value: 1
+            });
+
+          }
         }
       });
-      max = Math.max(1, points.length > 50 ? 5 : 2);
-    } else if (this.viewMode === 'scrolls' && this.rawData.scrolls) {
+
+      max = Math.max(
+        1,
+        points.length > 50 ? 5 : 2
+      );
+    }
+
+    // =========================
+    // SCROLLS
+    // =========================
+    else if (
+      this.viewMode === 'scrolls' &&
+      this.rawData.scrolls
+    ) {
+
       this.rawData.scrolls.forEach((scroll: any) => {
+
         if (scroll.scroll_y != null) {
-          // scroll.scroll_y es la cantidad exacta de pixeles que bajó la persona desde el tope (0)
-          const y = Math.round(Number(scroll.scroll_y));
-          points.push({
-            x: 640, // 1280 / 2
-            y: y,
-            value: 1
-          });
+
+          const scaledY =
+            Number(scroll.scroll_y) * scaleFactor;
+
+          if (
+            scaledY >= 0 &&
+            scaledY <= this.containerHeight
+          ) {
+
+            points.push({
+
+              // Centro dinámico
+              x: Math.round(this.containerWidth / 2),
+
+              y: Math.round(scaledY),
+
+              value: 1
+            });
+
+          }
         }
       });
+
       max = 3;
     }
 
-    this.heatmapInstance.setData({ max, data: points });
+    // Render final
+    this.heatmapInstance.setData({
+      max,
+      data: points
+    });
+
+    console.log(
+      `Heatmap renderizado con ${points.length} puntos`
+    );
   }
 }
