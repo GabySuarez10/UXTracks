@@ -136,7 +136,7 @@ const HEATMAP_WIDTH = 1280;
     /* El contenedor principal ahora usa dimensiones dinámicas (binding [style]) */
     .heatmap-container-wrapper {
       position: relative;
-      min-width: 100%;
+      margin: 0 auto; /* Centrar el heatmap en pantallas grandes */
       min-height: 600px;
     }
     .bg-image {
@@ -254,6 +254,16 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   }
 
   initHeatmap() {
+    // Limpiar contenedor por si se reinicializa tras cambiar dimensiones
+    if (this.heatmapContainer && this.heatmapContainer.nativeElement) {
+      this.heatmapContainer.nativeElement.innerHTML = '';
+
+      // Forzar dimensiones explícitas en el DOM nativo antes de que h337 lo lea.
+      // Esto evita que Angular se tarde en actualizar el DOM y el canvas quede recortado.
+      this.heatmapContainer.nativeElement.style.width = this.containerWidth + 'px';
+      this.heatmapContainer.nativeElement.style.height = this.containerHeight + 'px';
+    }
+
     this.heatmapInstance = h337.create({
       container: this.heatmapContainer.nativeElement,
       radius: 40,
@@ -312,14 +322,26 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
       img.onload = () => {
         this.containerWidth = img.naturalWidth || HEATMAP_WIDTH;
         this.containerHeight = img.naturalHeight || 2500;
-        // Re-renderizar con las dimensiones correctas
-        setTimeout(() => this.renderHeatmap());
+        // Recrear heatmap con las nuevas dimensiones del contenedor, 
+        // dando un pequeño margen para que Angular actualice el DOM primero
+        setTimeout(() => {
+          this.initHeatmap();
+          this.renderHeatmap();
+        }, 100);
       };
       img.src = snapshotBase64;
     }
 
     if (height) {
       this.containerHeight = height;
+    }
+
+    // Si ya teníamos width estático (o vino del backend), inicializamos y renderizamos aquí
+    if (width) {
+      setTimeout(() => {
+        this.initHeatmap();
+        this.renderHeatmap();
+      }, 100);
     }
   }
 
@@ -373,7 +395,8 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
     } else if (this.viewMode === 'scrolls' && this.rawData.scrolls) {
       this.rawData.scrolls.forEach((scroll: any) => {
         if (scroll.scroll_y != null) {
-          const y = Math.round(Number(scroll.scroll_y)) + window.innerHeight / 2;
+          // scroll.scroll_y es la cantidad exacta de pixeles que bajó la persona desde el tope (0)
+          const y = Math.round(Number(scroll.scroll_y));
           points.push({
             x: 640, // 1280 / 2
             y: y,
