@@ -1,0 +1,124 @@
+<div class="feedback-container">
+  <div class="feedback-header">
+    <div class="feedback-title-group">
+      <h2 class="feedback-title">Opiniones y Feedback</h2>
+      <p class="feedback-subtitle">Respuestas del popup inteligente para: <span class="url-highlight">{{ siteUrl }}</span></p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="feedback-loading">
+    <div class="spinner"></div>
+    <p>Cargando opiniones de usuarios...</p>
+  </div>
+
+  <div *ngIf="error" class="feedback-error">
+    <p>{{ error }}</p>
+    <button (click)="loadFeedbacks()" class="btn-retry">Reintentar</button>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <!-- Empty state inside component if no feedbacks exist yet -->
+    <div *ngIf="feedbacks.length === 0" class="feedback-empty-state">
+      <div class="empty-icon">💬</div>
+      <h3>No hay feedbacks registrados</h3>
+      <p>Aún no se ha recolectado feedback para esta página. El popup se mostrará a los usuarios que cumplan las condiciones de navegación.</p>
+    </div>
+
+    <div *ngIf="feedbacks.length > 0">
+      <!-- 3 Stat Cards -->
+      <div class="feedback-stats-grid">
+        <div class="stat-card satisfied">
+          <div class="stat-icon">😊</div>
+          <div class="stat-info">
+            <span class="stat-label">Satisfecho</span>
+            <span class="stat-value">{{ satisfechoCount }}</span>
+            <span class="stat-sub">{{ satisfechoPercent }}% del total</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill satisfied-fill" [style.width.%]="satisfechoPercent"></div>
+          </div>
+        </div>
+
+        <div class="stat-card neutral">
+          <div class="stat-icon">😐</div>
+          <div class="stat-info">
+            <span class="stat-label">Neutral</span>
+            <span class="stat-value">{{ neutralCount }}</span>
+            <span class="stat-sub">{{ neutralPercent }}% del total</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill neutral-fill" [style.width.%]="neutralPercent"></div>
+          </div>
+        </div>
+
+        <div class="stat-card unsatisfied">
+          <div class="stat-icon">😞</div>
+          <div class="stat-info">
+            <span class="stat-label">Insatisfecho</span>
+            <span class="stat-value">{{ insatisfechoCount }}</span>
+            <span class="stat-sub">{{ insatisfechoPercent }}% del total</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill unsatisfied-fill" [style.width.%]="insatisfechoPercent"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribution block -->
+      <div class="feedback-section-card">
+        <h3 class="section-card-title">Distribución de Satisfacción</h3>
+        <p class="section-card-desc">Proporción general de respuestas recolectadas (Total: {{ totalCount }} respuestas)</p>
+        
+        <div class="distribution-bar">
+          <div class="dist-segment satisfied-segment" [style.width.%]="satisfechoPercent" *ngIf="satisfechoCount > 0" title="Satisfecho: {{satisfechoPercent}}%">
+            <span>{{ satisfechoPercent }}%</span>
+          </div>
+          <div class="dist-segment neutral-segment" [style.width.%]="neutralPercent" *ngIf="neutralCount > 0" title="Neutral: {{neutralPercent}}%">
+            <span>{{ neutralPercent }}%</span>
+          </div>
+          <div class="dist-segment unsatisfied-segment" [style.width.%]="insatisfechoPercent" *ngIf="insatisfechoCount > 0" title="Insatisfecho: {{insatisfechoPercent}}%">
+            <span>{{ insatisfechoPercent }}%</span>
+          </div>
+        </div>
+
+        <div class="distribution-legend">
+          <span class="legend-item"><span class="legend-dot satisfied-dot"></span> Satisfecho (😊)</span>
+          <span class="legend-item"><span class="legend-dot neutral-dot"></span> Neutral (😐)</span>
+          <span class="legend-item"><span class="legend-dot unsatisfied-dot"></span> Insatisfecho (😞)</span>
+        </div>
+      </div>
+
+      <!-- Comments Timeline / List -->
+      <div class="feedback-section-card">
+        <h3 class="section-card-title">Comentarios y Sugerencias</h3>
+        <p class="section-card-desc">Opiniones detalladas proporcionadas por los usuarios (Total: {{ filteredComments.length }} comentarios)</p>
+
+        <div *ngIf="filteredComments.length === 0" class="no-comments-message">
+          <p>No se han ingresado comentarios de texto todavía. Los usuarios que marcan "Neutral" o "Insatisfecho" tienen la opción de dejar un mensaje.</p>
+        </div>
+
+        <div *ngIf="filteredComments.length > 0" class="comments-list">
+          <div *ngFor="let comment of filteredComments" class="comment-item">
+            <div class="comment-badge" [ngClass]="comment.response">
+              {{ getEmoji(comment.response) }}
+            </div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-question">{{ comment.event_type }}</span>
+                <span class="comment-date">{{ comment.timestamp | date:'dd MMM yyyy, h:mm a' }}</span>
+              </div>
+              <div class="comment-text">
+                "{{ comment.comment }}"
+              </div>
+              <div class="comment-meta">
+                <span class="meta-label">Sesión:</span> <span class="meta-val">{{ comment.session_id.slice(0, 12) }}...</span>
+                <span class="meta-separator">|</span>
+                <span class="meta-label">Calificación:</span> <span class="meta-val highlight-val" [ngClass]="comment.response">{{ getResponseLabel(comment.response) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

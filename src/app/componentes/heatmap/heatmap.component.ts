@@ -193,6 +193,13 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         setTimeout(() => {
           this.loading = false;
           this.rawData = data;
+          if (data && data.snapshot) {
+            this.backgroundImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(data.snapshot);
+            this.safeSiteUrl = null;
+          } else {
+            this.backgroundImageUrl = null;
+            this.updateSafeUrl();
+          }
           this.renderHeatmap();
         });
       },

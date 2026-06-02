@@ -378,16 +378,8 @@
     </section>
 
     <!-- ===== FEEDBACKS ===== -->
-    <section *ngIf="activeSection === 'feedbacks'" class="section section--empty" aria-labelledby="feedbacks-title">
-      <div class="empty-state">
-        <div class="empty-state__icon" aria-hidden="true">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        </div>
-        <h1 class="empty-state__title" id="feedbacks-title">Feedbacks</h1>
-        <p class="empty-state__desc">El panel de feedbacks de usuarios estará disponible próximamente.</p>
-      </div>
+    <section *ngIf="activeSection === 'feedbacks'" class="section" aria-labelledby="feedbacks-title">
+      <app-feedback [siteUrl]="currentSiteUrl"></app-feedback>
     </section>
 
   </main>

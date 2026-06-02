@@ -32,12 +32,12 @@ export class VisitasService {
         );
     }
 
-    getHeatmapData(url: string, startDate?: string, endDate?: string): Observable<{ clics: any[], scrolls: any[] }> {
+    getHeatmapData(url: string, startDate?: string, endDate?: string): Observable<{ clics: any[], scrolls: any[], snapshot?: string | null }> {
         let params = new HttpParams().set('url', url);
         if (startDate) params = params.set('startDate', startDate);
         if (endDate) params = params.set('endDate', endDate);
 
-        return this.httpClient.get<{ clics: any[], scrolls: any[] }>(`${this.apiUrl}/heatmaps`, { params }).pipe(
+        return this.httpClient.get<{ clics: any[], scrolls: any[], snapshot?: string | null }>(`${this.apiUrl}/heatmaps`, { params }).pipe(
             catchError(error => {
                 console.error('Error al obtener datos del mapa de calor:', error);
                 throw error;
@@ -72,6 +72,16 @@ export class VisitasService {
             })),
             catchError(error => {
                 console.error('Error al obtener estadisticas del dashboard:', error);
+                throw error;
+            })
+        );
+    }
+
+    getFeedbacks(url: string): Observable<any[]> {
+        const params = new HttpParams().set('url', url);
+        return this.httpClient.get<any[]>(`${this.apiUrl}/feedback`, { params }).pipe(
+            catchError(error => {
+                console.error('Error al obtener feedbacks:', error);
                 throw error;
             })
         );

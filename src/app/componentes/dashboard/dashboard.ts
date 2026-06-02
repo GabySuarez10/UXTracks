@@ -55,10 +55,11 @@ export interface HistogramBar {
 export type SectionType = 'dashboard' | 'heatmap' | 'feedbacks';
 
 import { HeatmapComponent } from '../heatmap/heatmap.component';
+import { FeedbackComponent } from '../feedback/feedback.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, HeatmapComponent, FormsModule, BaseChartDirective],
+  imports: [CommonModule, HeatmapComponent, FeedbackComponent, FormsModule, BaseChartDirective],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
