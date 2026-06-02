@@ -6,6 +6,9 @@ import { VisitasService } from '../../servicios/visitas.service';
 // @ts-ignore
 import h337 from 'heatmap.js';
 
+// Ancho fijo de referencia — debe coincidir con CAPTURE_WIDTH del backend (screenshot/route.js)
+const HEATMAP_WIDTH = 1280;
+
 @Component({
   selector: 'app-heatmap',
   standalone: true,
@@ -13,7 +16,7 @@ import h337 from 'heatmap.js';
   template: `
     <div class="heatmap-wrapper">
       <div *ngIf="loading" class="loading">Cargando mapa de calor...</div>
-      <div *ngIf="error" class="error">{{error}}</div>
+      <div *ngIf="error" class="error-msg">{{error}}</div>
 
       <div class="heatmap-toolbar" *ngIf="!loading && !error">
         <button (click)="toggleViewMode('clics')" [class.active]="viewMode === 'clics'">Clics</button>
@@ -25,11 +28,28 @@ import h337 from 'heatmap.js';
           (click)="captureScreenshot()">
           {{ capturing ? 'Capturando...' : '📷 Capturar sitio' }}
         </button>
+        <button
+          *ngIf="backgroundImageUrl"
+          class="btn-recapture"
+          [disabled]="capturing"
+          (click)="captureScreenshot()">
+          {{ capturing ? 'Capturando...' : '🔄 Recapturar' }}
+        </button>
       </div>
 
-      <div class="heatmap-container-wrapper">
+      <!-- Contenedor principal — ancho dinámico según la imagen capturada -->
+      <div class="heatmap-container-wrapper" [style.width.px]="containerWidth" [style.height.px]="containerHeight">
+
         <!-- Snapshot del sitio como fondo real -->
-        <img *ngIf="backgroundImageUrl" [src]="backgroundImageUrl" class="bg-image" alt="Captura del sitio" />
+        <img
+          *ngIf="backgroundImageUrl"
+          [src]="backgroundImageUrl"
+          class="bg-image"
+          [style.width.px]="containerWidth"
+          alt="Captura del sitio" />
+
+        <!-- Overlay blanco tenue: evita que interacciones se pierdan en páginas oscuras -->
+        <div *ngIf="backgroundImageUrl" class="heatmap-overlay"></div>
 
         <!-- Fondo neutro cuando no hay snapshot aún -->
         <div *ngIf="!backgroundImageUrl && !capturing" class="bg-placeholder">
@@ -66,7 +86,7 @@ import h337 from 'heatmap.js';
       position: sticky;
       top: 10px;
       right: 10px;
-      z-index: 10;
+      z-index: 20;
       background: white;
       padding: 5px;
       border-radius: 6px;
@@ -102,24 +122,42 @@ import h337 from 'heatmap.js';
       border-color: #148D8D !important;
       font-weight: 600;
     }
-    .btn-capture:disabled {
+    .btn-recapture {
+      background: #f0f4f8 !important;
+      color: #475569 !important;
+      border-color: #cbd5e1 !important;
+      font-size: 13px !important;
+    }
+    .btn-capture:disabled,
+    .btn-recapture:disabled {
       opacity: 0.6;
       cursor: not-allowed !important;
     }
+    /* El contenedor principal ahora usa dimensiones dinámicas (binding [style]) */
     .heatmap-container-wrapper {
       position: relative;
-      width: auto;
       min-width: 100%;
-      height: 2500px;
+      min-height: 600px;
     }
     .bg-image {
       position: absolute;
       top: 0;
       left: 0;
-      width: 1920px;
       height: auto;
       pointer-events: none;
       z-index: 1;
+      display: block;
+    }
+    /* ── Overlay blanco tenue entre imagen y puntos de calor ── */
+    .heatmap-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.18);
+      pointer-events: none;
+      z-index: 2;
     }
     .bg-placeholder {
       position: absolute;
@@ -145,9 +183,7 @@ import h337 from 'heatmap.js';
       border: 1px solid #cbd5e1;
       backdrop-filter: blur(4px);
     }
-    .bg-placeholder-icon {
-      font-size: 32px;
-    }
+    .bg-placeholder-icon { font-size: 32px; }
     .capturing-icon {
       animation: spin 1.5s linear infinite;
       display: inline-block;
@@ -156,24 +192,18 @@ import h337 from 'heatmap.js';
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-    .bg-placeholder-text {
-      font-size: 14px;
-      font-weight: 600;
-      color: #475569;
-    }
-    .bg-placeholder-hint {
-      font-size: 12px;
-      color: #94a3b8;
-    }
+    .bg-placeholder-text { font-size: 14px; font-weight: 600; color: #475569; }
+    .bg-placeholder-hint { font-size: 12px; color: #94a3b8; }
+    /* El heatmap canvas se superpone encima del overlay (z-index 3) */
     .heatmap-container {
-      width: 1920px;
-      height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 2;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
     }
-    .loading, .error {
+    .loading, .error-msg {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -182,7 +212,7 @@ import h337 from 'heatmap.js';
       text-align: center;
       z-index: 5;
     }
-    .error { color: #dc2626; background: #fee2e2; border-radius: 8px; }
+    .error-msg { color: #dc2626; background: #fee2e2; border-radius: 8px; }
   `]
 })
 export class HeatmapComponent implements AfterViewInit, OnChanges {
@@ -199,6 +229,10 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   rawData: { clics: any[], scrolls: any[] } = { clics: [], scrolls: [] };
   backgroundImageUrl: SafeUrl | null = null;
+
+  // Dimensiones dinámicas del contenedor — se ajustan al tamaño real de la captura
+  containerWidth: number = HEATMAP_WIDTH;
+  containerHeight: number = 2500;
 
   constructor(
     private visitasService: VisitasService,
@@ -246,9 +280,8 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
           this.loading = false;
           this.rawData = data;
           if (data && data.snapshot) {
-            this.backgroundImageUrl = this.sanitizer.bypassSecurityTrustUrl(data.snapshot);
+            this.applySnapshot(data.snapshot);
           } else {
-            // Sin snapshot: mostrar placeholder con botón de captura
             this.backgroundImageUrl = null;
           }
           this.renderHeatmap();
@@ -264,19 +297,46 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
     });
   }
 
+  /**
+   * Aplica el snapshot como fondo y detecta las dimensiones reales de la imagen
+   * para ajustar el contenedor dinámicamente.
+   */
+  private applySnapshot(snapshotBase64: string, width?: number, height?: number) {
+    this.backgroundImageUrl = this.sanitizer.bypassSecurityTrustUrl(snapshotBase64);
+
+    if (width) {
+      this.containerWidth = width;
+    } else {
+      // Detectar dimensiones desde la imagen base64
+      const img = new Image();
+      img.onload = () => {
+        this.containerWidth = img.naturalWidth || HEATMAP_WIDTH;
+        this.containerHeight = img.naturalHeight || 2500;
+        // Re-renderizar con las dimensiones correctas
+        setTimeout(() => this.renderHeatmap());
+      };
+      img.src = snapshotBase64;
+    }
+
+    if (height) {
+      this.containerHeight = height;
+    }
+  }
+
   captureScreenshot() {
     if (!this.siteUrl || this.capturing) return;
     this.capturing = true;
 
-    this.http.post<{ snapshot: string }>(
+    this.http.post<{ snapshot: string; width?: number; height?: number }>(
       `${this.apiBase}/screenshot`,
       { url: this.siteUrl }
     ).subscribe({
       next: (res) => {
         this.capturing = false;
         if (res && res.snapshot) {
-          this.backgroundImageUrl = this.sanitizer.bypassSecurityTrustUrl(res.snapshot);
-          console.log('Screenshot capturado y aplicado como fondo del heatmap');
+          this.applySnapshot(res.snapshot, res.width, res.height);
+          setTimeout(() => this.renderHeatmap());
+          console.log(`Screenshot capturado: ${res.width}x${res.height}px`);
         }
       },
       error: (err) => {
@@ -315,7 +375,7 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         if (scroll.scroll_y != null) {
           const y = Math.round(Number(scroll.scroll_y)) + window.innerHeight / 2;
           points.push({
-            x: 960, // center of 1920
+            x: 640, // 1280 / 2
             y: y,
             value: 1
           });
@@ -324,9 +384,6 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
       max = 3;
     }
 
-    this.heatmapInstance.setData({
-      max: max,
-      data: points
-    });
+    this.heatmapInstance.setData({ max, data: points });
   }
 }
