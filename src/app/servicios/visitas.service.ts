@@ -8,8 +8,8 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class VisitasService {
 
-    // public apiUrl = 'http://localhost:3000/rutas';
-    public apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
+    // private apiUrl = 'http://localhost:3000/rutas';
+    private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     constructor(
         private httpClient: HttpClient
@@ -44,8 +44,11 @@ export class VisitasService {
         startDate?: string,
         endDate?: string
     ): Observable<{
+        width: number;
+        height: number;
         clics: any[];
         scrolls: any[];
+        snapshot?: string | null;
     }> {
 
         let params = new HttpParams().set('url', url);
@@ -59,8 +62,11 @@ export class VisitasService {
         }
 
         return this.httpClient.get<{
+            width: number;
+            height: number;
             clics: any[];
             scrolls: any[];
+            snapshot?: string | null;
         }>(
             `${this.apiUrl}/heatmaps`,
             { params }

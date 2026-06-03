@@ -23,14 +23,21 @@ const HEATMAP_WIDTH = 1280;
         <button (click)="toggleViewMode('scrolls')" [class.active]="viewMode === 'scrolls'">Scrolls</button>
       </div>
 
-      <!-- Contenedor principal -->
+      <!-- Contenedor principal overlayed -->
       <div class="heatmap-container-wrapper" [style.width.px]="containerWidth" [style.height.px]="containerHeight">
         
-        <!-- IFrame de la URL real -->
-        <iframe *ngIf="safeSiteUrl" [src]="safeSiteUrl" class="bg-iframe" 
-                [style.width.px]="containerWidth" [style.height.px]="containerHeight" scrolling="no"></iframe>
-        
-        <!-- Filtro transparente para bloquear interacción con el iframe -->
+        <!-- IFrame de fondo para renderizar la web real como un elemento estático -->
+        <iframe
+          *ngIf="safeSiteUrl"
+          [src]="safeSiteUrl"
+          class="bg-iframe"
+          sandbox="allow-same-origin allow-scripts"
+          scrolling="no"
+          [style.width.px]="containerWidth"
+          [style.height.px]="containerHeight">
+        </iframe>
+
+        <!-- Filtro transparente para homogeneizar y evitar interferencia de clicks sobre la web real si se requiere -->
         <div class="heatmap-overlay"></div>
 
         <!-- Canvas del Heatmap -->
@@ -94,7 +101,7 @@ const HEATMAP_WIDTH = 1280;
       border: none;
       display: block;
       z-index: 1;
-      pointer-events: none;
+      pointer-events: none; /* Previene interacciones directamente en el iframe */
     }
     .heatmap-overlay {
       position: absolute;
@@ -103,7 +110,7 @@ const HEATMAP_WIDTH = 1280;
       width: 100%;
       height: 100%;
       background: rgba(255, 255, 255, 0.08);
-      pointer-events: none;
+      pointer-events: auto; /* Bloquea cualquier click para que no llegue al iframe */
       z-index: 2;
     }
     .heatmap-container {
@@ -145,7 +152,8 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   constructor(
     private visitasService: VisitasService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private http: HttpClient
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -158,9 +166,6 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    if (this.siteUrl && !this.safeSiteUrl) {
-      this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.siteUrl);
-    }
     this.initHeatmap();
     this.loadData();
   }
@@ -197,7 +202,7 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         setTimeout(() => {
           this.loading = false;
           this.rawData = data;
-
+          
           this.calculateDimensions();
           this.initHeatmap();
           this.renderHeatmap();
@@ -215,29 +220,22 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   calculateDimensions() {
     let maxPageHeight = 1200; // fall-back inicial
-
+    
     if (this.rawData.clics && this.rawData.clics.length > 0) {
       this.rawData.clics.forEach((clic: any) => {
         if (clic.posicion_y && Number(clic.posicion_y) > maxPageHeight) {
           maxPageHeight = Number(clic.posicion_y);
+        }
+        if (clic.page_height && Number(clic.page_height) > maxPageHeight) {
+          maxPageHeight = Number(clic.page_height);
         }
       });
     }
 
     if (this.rawData.scrolls && this.rawData.scrolls.length > 0) {
       this.rawData.scrolls.forEach((scroll: any) => {
-        if (scroll.scroll_y && Number(scroll.scroll_y) > 0) {
-          let estimatedHeight = Number(scroll.scroll_y);
-          if (scroll.porcentaje_scroll && Number(scroll.porcentaje_scroll) > 0) {
-            // total scrollable height = scroll_y * 100 / porcentaje_scroll
-            // total page height = total scrollable height + viewport height (aprox 900px)
-            estimatedHeight = Math.round((Number(scroll.scroll_y) * 100) / Number(scroll.porcentaje_scroll)) + 900;
-          } else {
-            estimatedHeight = Number(scroll.scroll_y) + 1000;
-          }
-          if (estimatedHeight > maxPageHeight) {
-            maxPageHeight = estimatedHeight;
-          }
+        if (scroll.scroll_y && Number(scroll.scroll_y) > maxPageHeight) {
+          maxPageHeight = Number(scroll.scroll_y);
         }
       });
     }
