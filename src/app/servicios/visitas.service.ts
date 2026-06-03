@@ -62,11 +62,8 @@ export class VisitasService {
         }
 
         return this.httpClient.get<{
-            width: number;
-            height: number;
             clics: any[];
             scrolls: any[];
-            snapshot?: string | null;
         }>(
             `${this.apiUrl}/heatmaps`,
             { params }
