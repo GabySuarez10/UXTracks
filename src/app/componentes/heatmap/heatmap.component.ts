@@ -31,7 +31,6 @@ const HEATMAP_WIDTH = 1280;
           *ngIf="safeSiteUrl"
           [src]="safeSiteUrl"
           class="bg-iframe"
-          sandbox="allow-same-origin allow-scripts"
           scrolling="no"
           [style.width.px]="containerWidth"
           [style.height.px]="containerHeight">
