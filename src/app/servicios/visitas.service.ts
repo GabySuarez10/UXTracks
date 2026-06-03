@@ -44,11 +44,8 @@ export class VisitasService {
         startDate?: string,
         endDate?: string
     ): Observable<{
-        width: number;
-        height: number;
         clics: any[];
         scrolls: any[];
-        snapshot?: string | null;
     }> {
 
         let params = new HttpParams().set('url', url);
