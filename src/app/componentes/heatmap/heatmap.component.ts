@@ -1,11 +1,12 @@
 import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
 import { VisitasService } from '../../servicios/visitas.service';
 // @ts-ignore
 import h337 from 'heatmap.js';
 
-// Ancho fijo de referencia — debe coincidir con el ancho típico de escritorio si no hay metadata
+// Ancho fijo de referencia para el iframe y heatmap
 const HEATMAP_WIDTH = 1280;
 
 @Component({
@@ -22,23 +23,22 @@ const HEATMAP_WIDTH = 1280;
         <button (click)="toggleViewMode('scrolls')" [class.active]="viewMode === 'scrolls'">Scrolls</button>
       </div>
 
-      <!-- Contenedor principal — alto dinámico según los datos de la página real -->
+      <!-- Contenedor principal overlayed -->
       <div class="heatmap-container-wrapper" [style.width.px]="containerWidth" [style.height.px]="containerHeight">
-
-        <!-- Iframe del sitio cargado como fondo visual -->
+        
+        <!-- IFrame de fondo para renderizar la web real -->
         <iframe
-          *ngIf="safeUrl"
-          [src]="safeUrl"
+          *ngIf="safeSiteUrl"
+          [src]="safeSiteUrl"
           class="bg-iframe"
-          title="Sitio Trackeado"
-          sandbox="allow-same-origin allow-scripts allow-forms"
           [style.width.px]="containerWidth"
           [style.height.px]="containerHeight">
         </iframe>
 
-        <!-- Overlay transparente para que el iframe no intercepte clics del usuario del dashboard -->
+        <!-- Filtro transparente para homogeneizar y evitar interferencia de clicks sobre la web real si se requiere -->
         <div class="heatmap-overlay"></div>
 
+        <!-- Canvas del Heatmap -->
         <div class="heatmap-container" #heatmapContainer></div>
       </div>
     </div>
@@ -91,16 +91,15 @@ const HEATMAP_WIDTH = 1280;
       position: relative;
       margin: 0 auto;
       min-height: 600px;
-      background: #fff;
     }
     .bg-iframe {
       position: absolute;
       top: 0;
       left: 0;
       border: none;
-      pointer-events: none; /* Crucial para evitar interacciones */
-      z-index: 1;
       display: block;
+      z-index: 1;
+      pointer-events: none;
     }
     .heatmap-overlay {
       position: absolute;
@@ -108,7 +107,7 @@ const HEATMAP_WIDTH = 1280;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
       pointer-events: none;
       z-index: 2;
     }
@@ -119,6 +118,7 @@ const HEATMAP_WIDTH = 1280;
       width: 100%;
       height: 100%;
       z-index: 3;
+      pointer-events: none;
     }
     .loading, .error-msg {
       position: absolute;
@@ -142,19 +142,22 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   viewMode: 'clics' | 'scrolls' = 'clics';
 
   rawData: { clics: any[], scrolls: any[] } = { clics: [], scrolls: [] };
-  safeUrl: SafeResourceUrl | null = null;
+  safeSiteUrl: SafeResourceUrl | null = null;
 
+  // Dimensiones dinámicas
   containerWidth: number = HEATMAP_WIDTH;
-  containerHeight: number = 2500;
+  containerHeight: number = 1200;
 
   constructor(
     private visitasService: VisitasService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private http: HttpClient
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['siteUrl'] && this.siteUrl) {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.siteUrl);
+      const proxyUrl = `${this.visitasService.apiUrl}/proxy?url=${encodeURIComponent(this.siteUrl)}`;
+      this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
       if (this.heatmapInstance) {
         this.loadData();
       }
@@ -162,8 +165,9 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    if (this.siteUrl) {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.siteUrl);
+    if (this.siteUrl && !this.safeSiteUrl) {
+      const proxyUrl = `${this.visitasService.apiUrl}/proxy?url=${encodeURIComponent(this.siteUrl)}`;
+      this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
     }
     this.initHeatmap();
     this.loadData();
@@ -201,7 +205,9 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         setTimeout(() => {
           this.loading = false;
           this.rawData = data;
+
           this.calculateDimensions();
+          this.initHeatmap();
           this.renderHeatmap();
         });
       },
@@ -216,8 +222,8 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   }
 
   calculateDimensions() {
-    let maxPageHeight = 1200;
-    
+    let maxPageHeight = 1200; // fall-back inicial
+
     if (this.rawData.clics && this.rawData.clics.length > 0) {
       this.rawData.clics.forEach((clic: any) => {
         if (clic.posicion_y && Number(clic.posicion_y) > maxPageHeight) {
@@ -231,6 +237,8 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         if (scroll.scroll_y && Number(scroll.scroll_y) > 0) {
           let estimatedHeight = Number(scroll.scroll_y);
           if (scroll.porcentaje_scroll && Number(scroll.porcentaje_scroll) > 0) {
+            // total scrollable height = scroll_y * 100 / porcentaje_scroll
+            // total page height = total scrollable height + viewport height (aprox 900px)
             estimatedHeight = Math.round((Number(scroll.scroll_y) * 100) / Number(scroll.porcentaje_scroll)) + 900;
           } else {
             estimatedHeight = Number(scroll.scroll_y) + 1000;
@@ -242,13 +250,8 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
       });
     }
 
+    // Le sumamos 200px de margen de seguridad
     this.containerHeight = maxPageHeight + 200;
-    
-    // Re-aplicar dimensiones
-    if (this.heatmapContainer && this.heatmapContainer.nativeElement) {
-      this.heatmapContainer.nativeElement.style.height = this.containerHeight + 'px';
-      this.initHeatmap(); // Reiniciar heatmap con nuevo tamaño
-    }
   }
 
   toggleViewMode(mode: 'clics' | 'scrolls') {
@@ -259,6 +262,7 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   renderHeatmap() {
     if (!this.heatmapInstance) return;
 
+    // Limpiar anterior
     this.heatmapInstance.setData({
       max: 1,
       data: []
@@ -266,8 +270,10 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
     const points: any[] = [];
     let max = 1;
-    const scaleFactor = this.containerWidth / HEATMAP_WIDTH;
 
+    // =========================
+    // CLICS
+    // =========================
     if (this.viewMode === 'clics' && this.rawData.clics) {
       this.rawData.clics.forEach((clic: any) => {
         if (clic.posicion_x != null && clic.posicion_y != null) {
@@ -279,11 +285,17 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
             scaledX = (scaledX / Number(clic.viewport_width)) * this.containerWidth;
           } else {
             // Fallback de escala por defecto
+            const scaleFactor = this.containerWidth / HEATMAP_WIDTH;
             scaledX = scaledX * scaleFactor;
             scaledY = scaledY * scaleFactor;
           }
 
-          if (scaledX >= 0 && scaledY >= 0 && scaledX <= this.containerWidth && scaledY <= this.containerHeight) {
+          if (
+            scaledX >= 0 &&
+            scaledY >= 0 &&
+            scaledX <= this.containerWidth &&
+            scaledY <= this.containerHeight
+          ) {
             points.push({
               x: Math.round(scaledX),
               y: Math.round(scaledY),
@@ -292,13 +304,22 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
           }
         }
       });
+
       max = Math.max(1, points.length > 50 ? 5 : 2);
     }
+
+    // =========================
+    // SCROLLS
+    // =========================
     else if (this.viewMode === 'scrolls' && this.rawData.scrolls) {
       this.rawData.scrolls.forEach((scroll: any) => {
         if (scroll.scroll_y != null) {
-          const scaledY = Number(scroll.scroll_y) * scaleFactor;
-          if (scaledY >= 0 && scaledY <= this.containerHeight) {
+          let scaledY = Number(scroll.scroll_y);
+
+          if (
+            scaledY >= 0 &&
+            scaledY <= this.containerHeight
+          ) {
             points.push({
               x: Math.round(this.containerWidth / 2),
               y: Math.round(scaledY),
@@ -307,9 +328,11 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
           }
         }
       });
+
       max = 3;
     }
 
+    // Render final
     this.heatmapInstance.setData({
       max,
       data: points
