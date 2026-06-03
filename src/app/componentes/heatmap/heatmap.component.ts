@@ -156,7 +156,10 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['siteUrl'] && this.siteUrl) {
-      const proxyUrl = `${this.visitasService.apiUrl}/proxy?url=${encodeURIComponent(this.siteUrl)}`;
+      let targetUrl = this.siteUrl;
+      // Quitamos el trailing slash para evitar dobles slashes en la reconstrucción
+      if (targetUrl.endsWith('/')) targetUrl = targetUrl.slice(0, -1);
+      const proxyUrl = `${this.visitasService.apiUrl}/proxy2/${targetUrl}`;
       this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
       if (this.heatmapInstance) {
         this.loadData();
