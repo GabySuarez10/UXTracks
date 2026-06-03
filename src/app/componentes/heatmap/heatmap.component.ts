@@ -294,6 +294,7 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
           } else {
             this.backgroundImageUrl = null;
           }
+          this.calculateDimensions();
           this.renderHeatmap();
         });
       },
@@ -305,6 +306,42 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         console.error('Heatmap fetch error:', err);
       }
     });
+  }
+
+  calculateDimensions() {
+    let maxPageHeight = this.containerHeight || 1200;
+    
+    if (this.rawData.clics && this.rawData.clics.length > 0) {
+      this.rawData.clics.forEach((clic: any) => {
+        if (clic.posicion_y && Number(clic.posicion_y) > maxPageHeight) {
+          maxPageHeight = Number(clic.posicion_y);
+        }
+      });
+    }
+
+    if (this.rawData.scrolls && this.rawData.scrolls.length > 0) {
+      this.rawData.scrolls.forEach((scroll: any) => {
+        if (scroll.scroll_y && Number(scroll.scroll_y) > 0) {
+          let estimatedHeight = Number(scroll.scroll_y);
+          if (scroll.porcentaje_scroll && Number(scroll.porcentaje_scroll) > 0) {
+            estimatedHeight = Math.round((Number(scroll.scroll_y) * 100) / Number(scroll.porcentaje_scroll)) + 900;
+          } else {
+            estimatedHeight = Number(scroll.scroll_y) + 1000;
+          }
+          if (estimatedHeight > maxPageHeight) {
+            maxPageHeight = estimatedHeight;
+          }
+        }
+      });
+    }
+
+    if (maxPageHeight > this.containerHeight) {
+      this.containerHeight = maxPageHeight + 200;
+      // Re-aplicar dimensiones al contenedor
+      if (this.heatmapContainer && this.heatmapContainer.nativeElement) {
+        this.heatmapContainer.nativeElement.style.height = this.containerHeight + 'px';
+      }
+    }
   }
 
   /**
@@ -407,11 +444,17 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
           clic.posicion_y != null
         ) {
 
-          const scaledX =
-            Number(clic.posicion_x) * scaleFactor;
+          let scaledX = Number(clic.posicion_x);
+          let scaledY = Number(clic.posicion_y);
 
-          const scaledY =
-            Number(clic.posicion_y) * scaleFactor;
+          // Normalizar coordenadas usando el viewport_width original del visitante
+          if (clic.viewport_width && Number(clic.viewport_width) > 0) {
+            scaledX = (scaledX / Number(clic.viewport_width)) * this.containerWidth;
+          } else {
+            // Fallback de escala por defecto
+            scaledX = scaledX * scaleFactor;
+            scaledY = scaledY * scaleFactor;
+          }
 
           // Ignorar puntos fuera del canvas
           if (
