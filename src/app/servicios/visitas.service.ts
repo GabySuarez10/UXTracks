@@ -9,7 +9,7 @@ import { catchError, map } from 'rxjs/operators';
 export class VisitasService {
 
     // private apiUrl = 'http://localhost:3000/rutas';
-    private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
+    public apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     constructor(
         private httpClient: HttpClient
