@@ -19,24 +19,28 @@ const HEATMAP_WIDTH = 1280;
       <div *ngIf="error" class="error-msg">{{error}}</div>
 
       <div class="heatmap-toolbar" *ngIf="!loading && !error">
+        <button (click)="takeSnapshot()" [disabled]="capturing">
+          {{ capturing ? 'Capturando...' : (snapshotUrl ? 'Recapturar Fondo' : 'Capturar Fondo') }}
+        </button>
         <button (click)="toggleViewMode('clics')" [class.active]="viewMode === 'clics'">Clics</button>
         <button (click)="toggleViewMode('scrolls')" [class.active]="viewMode === 'scrolls'">Scrolls</button>
       </div>
 
-      <!-- Contenedor principal overlayed -->
+      <!-- Contenedor principal -->
       <div class="heatmap-container-wrapper" [style.width.px]="containerWidth" [style.height.px]="containerHeight">
         
-        <!-- IFrame de fondo para renderizar la web real -->
-        <iframe
-          *ngIf="safeSiteUrl"
-          [src]="safeSiteUrl"
-          class="bg-iframe"
-          [style.width.px]="containerWidth"
-          [style.height.px]="containerHeight">
-        </iframe>
-
-        <!-- Filtro transparente para homogeneizar y evitar interferencia de clicks sobre la web real si se requiere -->
-        <div class="heatmap-overlay"></div>
+        <!-- Imagen de fondo capturada por Microlink -->
+        <img *ngIf="snapshotUrl" [src]="snapshotUrl" class="bg-image" 
+             [style.width.px]="containerWidth" [style.height.px]="containerHeight" alt="Sitio web">
+        
+        <!-- Fallback si no hay imagen -->
+        <div *ngIf="!snapshotUrl && !loading && !capturing" class="bg-fallback">
+          <div class="bg-fallback-content">
+            <span class="bg-fallback-icon">📸</span>
+            <span class="bg-fallback-text">Fondo no capturado</span>
+            <span class="bg-fallback-hint">Haz clic en "Capturar Fondo" para ver tu sitio web aquí</span>
+          </div>
+        </div>
 
         <!-- Canvas del Heatmap -->
         <div class="heatmap-container" #heatmapContainer></div>
@@ -92,25 +96,41 @@ const HEATMAP_WIDTH = 1280;
       margin: 0 auto;
       min-height: 600px;
     }
-    .bg-iframe {
+    .bg-image {
       position: absolute;
       top: 0;
       left: 0;
-      border: none;
       display: block;
       z-index: 1;
-      pointer-events: none;
+      object-fit: cover;
+      object-position: top center;
     }
-    .heatmap-overlay {
+    .bg-fallback {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.08);
-      pointer-events: none;
-      z-index: 2;
+      background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 80px;
     }
+    .bg-fallback-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.85);
+      padding: 24px 32px;
+      border-radius: 12px;
+      border: 1px solid #dee2e6;
+    }
+    .bg-fallback-icon { font-size: 36px; }
+    .bg-fallback-text { font-size: 14px; font-weight: 600; color: #495057; }
+    .bg-fallback-hint { font-size: 12px; color: #868e96; }
     .heatmap-container {
       position: absolute;
       top: 0;
@@ -142,7 +162,8 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   viewMode: 'clics' | 'scrolls' = 'clics';
 
   rawData: { clics: any[], scrolls: any[] } = { clics: [], scrolls: [] };
-  safeSiteUrl: SafeResourceUrl | null = null;
+  snapshotUrl: string | null = null;
+  capturing = false;
 
   // Dimensiones dinámicas
   containerWidth: number = HEATMAP_WIDTH;
@@ -150,14 +171,11 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   constructor(
     private visitasService: VisitasService,
-    private sanitizer: DomSanitizer,
     private http: HttpClient
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['siteUrl'] && this.siteUrl) {
-      const proxyUrl = `${this.visitasService.apiUrl}/proxy?url=${encodeURIComponent(this.siteUrl)}`;
-      this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
       if (this.heatmapInstance) {
         this.loadData();
       }
@@ -165,10 +183,6 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    if (this.siteUrl && !this.safeSiteUrl) {
-      const proxyUrl = `${this.visitasService.apiUrl}/proxy?url=${encodeURIComponent(this.siteUrl)}`;
-      this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
-    }
     this.initHeatmap();
     this.loadData();
   }
@@ -205,6 +219,7 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         setTimeout(() => {
           this.loading = false;
           this.rawData = data;
+          this.snapshotUrl = data.snapshot || null;
 
           this.calculateDimensions();
           this.initHeatmap();
@@ -252,6 +267,37 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
     // Le sumamos 200px de margen de seguridad
     this.containerHeight = maxPageHeight + 200;
+  }
+
+  takeSnapshot() {
+    if (!this.siteUrl) return;
+    this.capturing = true;
+    this.error = '';
+
+    this.http.post<any>(`${this.visitasService.apiUrl}/screenshot`, { url: this.siteUrl })
+      .subscribe({
+        next: (res) => {
+          this.capturing = false;
+          if (res.success && res.snapshotUrl) {
+            this.snapshotUrl = res.snapshotUrl;
+            // Opcional: ajustar containerHeight si la API devuelve dimensiones
+            if (res.height) {
+              this.containerHeight = Math.max(this.containerHeight, res.height);
+              setTimeout(() => {
+                this.initHeatmap();
+                this.renderHeatmap();
+              }, 50);
+            }
+          } else {
+            this.error = 'Error al generar la captura. Intente nuevamente.';
+          }
+        },
+        error: (err) => {
+          this.capturing = false;
+          this.error = 'Error de conexión al generar la captura.';
+          console.error('Screenshot error:', err);
+        }
+      });
   }
 
   toggleViewMode(mode: 'clics' | 'scrolls') {
