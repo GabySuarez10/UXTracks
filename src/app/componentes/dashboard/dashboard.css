@@ -1884,6 +1884,66 @@
   cursor: not-allowed;
 }
 
+/* ══════════════════════════════════════
+   PRINT / PDF EXPORT
+══════════════════════════════════════ */
+@media print {
+  /* Oculta todo lo que no es el dashboard */
+  .topbar,
+  .sidebar,
+  .backdrop,
+  .export-btn,
+  .date-filter__pills,
+  .date-filter__apply,
+  .modal-overlay { display: none !important; }
+
+  /* Resetea el layout para impresión */
+  :host {
+    background: #eef1f3 !important;
+  }
+
+  .layout {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  .main {
+    margin-left: 0 !important;
+    padding: 20px !important;
+  }
+
+  /* Evita cortes dentro de cards */
+  .card,
+  .trend-card,
+  .ucard,
+  .chart-wrapper,
+  .histogram-card,
+  .time-card { 
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Saltos de página controlados */
+  .trend-grid,
+  .user-metrics-grid,
+  .section-divider {
+    break-before: auto;
+    page-break-before: auto;
+  }
+
+  /* Asegura que los colores se impriman */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Muestra el logo header en el PDF */
+  .pdf-logo-header {
+    display: block !important;
+  }
+}
+
 /* Responsive polish: keeps the current visual system while preventing tight layouts */
 @media (max-width: 1180px) {
   .main {

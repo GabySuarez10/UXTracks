@@ -400,50 +400,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   goHome(): void { this.router.navigate(['/']); }
   goToSeleccion(): void { this.router.navigate(['/seleccion']); }
 
-  async downloadReport(): Promise<void> {
-    this.isExporting = true;
+async downloadReport(): Promise<void> {
+  this.isExporting = true;
+  await new Promise(r => setTimeout(r, 200));
 
-    // Give Angular a moment to render the pdf-logo-header
-    setTimeout(async () => {
-      try {
-        const dashboardContent = document.getElementById('dashboard-content');
-        if (!dashboardContent) {
-          throw new Error('Dashboard content not found');
-        }
+  const originalTitle = document.title;
+  const dateStr = new Date().toISOString().split('T')[0];
+  document.title = `Reporte-${this.currentSiteTitle || 'Sitio'}-${dateStr}`;
 
-        // Capture canvas
-        const canvas = await html2canvas(dashboardContent, {
-          scale: 2,
-          useCORS: true,
-          logging: false
-        });
+  window.print();
 
-        const imgData = canvas.toDataURL('image/png');
-
-        // Calculate PDF proportions
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4'
-        });
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-        const dateStr = new Date().toISOString().split('T')[0];
-        const filename = `Reporte-${this.currentSiteTitle || 'Sitio'}-${dateStr}.pdf`;
-        pdf.save(filename);
-
-      } catch (error) {
-        console.error('Error generating PDF report:', error);
-        alert('Hubo un error al generar el reporte.');
-      } finally {
-        this.isExporting = false;
-      }
-    }, 100);
-  }
+  document.title = originalTitle;
+  this.isExporting = false;
+}
 
   // Account management
   openAccountModal(): void { this.showAccountModal = true; }

@@ -119,20 +119,44 @@ export class Homepage {
     // Navegar a página de registro
      this.router.navigate(['/registro']);
   }
+private readonly INTERVAL = 1500;
+  private timer: ReturnType<typeof setInterval> | null = null;
 
+  ngOnInit(): void {
+    this.startAutoPlay();
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoPlay();
+  }
+
+  private startAutoPlay(): void {
+    this.timer = setInterval(() => this.nextSlide(), this.INTERVAL);
+  }
+
+  private stopAutoPlay(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  }
   // Métodos para el carrusel
   nextSlide(): void {
     this.currentSlide = (this.currentSlide + 1) % this.carouselImages.length;
   }
 
   prevSlide(): void {
-    this.currentSlide = this.currentSlide === 0 
-      ? this.carouselImages.length - 1 
+    this.stopAutoPlay();  // 👈 agrega esto
+    this.currentSlide = this.currentSlide === 0
+      ? this.carouselImages.length - 1
       : this.currentSlide - 1;
+    this.startAutoPlay(); // 👈 agrega esto
   }
 
   goToSlide(index: number): void {
+    this.stopAutoPlay();  // 👈 agrega esto
     this.currentSlide = index;
+    this.startAutoPlay(); // 👈 agrega esto
   }
 
   // TrackBy function para mejor performance

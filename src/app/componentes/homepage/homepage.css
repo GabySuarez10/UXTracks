@@ -27,6 +27,7 @@
   font-family: var(--font-body);
   color: var(--color-primary);
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -55,6 +56,15 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+}
+
+.logo-uxtracks span {
+  transition: transform var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+.logo-uxtracks:hover .t-part {
+  transform: translateY(-2px) scale(1.08);
+  text-shadow: 0 8px 18px rgba(20, 141, 141, 0.24);
 }
 
 
@@ -169,6 +179,7 @@ display: inline-block;
   color: var(--color-white);
   margin-bottom: 1.5rem;
   font-weight: 400;
+  animation: heroIntro 0.75s ease-out both;
 }
 
 .hero p {
@@ -176,6 +187,11 @@ display: inline-block;
   margin-bottom: 1rem;
   opacity: 0.95;
   line-height: 1.6;
+  animation: heroIntro 0.75s ease-out 0.12s both;
+}
+
+.hero .mt-3 {
+  animation-delay: 0.22s;
 }
 
 .hero .highlight {
@@ -221,6 +237,7 @@ p{
   border: 1px solid rgba(14, 44, 64, 0.1);
   position: relative;
   overflow: hidden;
+  will-change: transform;
 }
 
 
@@ -232,6 +249,19 @@ p{
 .feature-card {
   cursor: pointer;
   text-align: center;
+  animation: featureCardIn 0.65s ease-out both, featureFloat 7s ease-in-out infinite;
+}
+
+.feature-card:nth-child(2n) {
+  animation-delay: 0.08s, 1.2s;
+}
+
+.feature-card:nth-child(3n) {
+  animation-delay: 0.16s, 2.1s;
+}
+
+.feature-card:nth-child(4n) {
+  animation-delay: 0.24s, 0.6s;
 }
 
 .feature-card::before {
@@ -268,7 +298,7 @@ p{
 }
 
 .feature-card:hover .feature-icon {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(-3deg);
 }
 
 .card h3 {
@@ -347,6 +377,14 @@ p{
   font-size: 4rem;
   display: block;
   margin-bottom: 1rem;
+}
+
+.carousel-slide.active .carousel-icon {
+  animation: iconPop 0.55s ease-out both;
+}
+
+.carousel-slide.active .carousel-title {
+  animation: softFadeUp 0.45s ease-out 0.08s both;
 }
 
 .carousel-title {
@@ -461,6 +499,10 @@ p{
   flex-wrap: wrap;
 }
 
+.cta-section .btn-primary {
+  animation: ctaPulse 3.4s ease-in-out infinite;
+}
+
 /* Footer */
 .footer {
   background-color: var(--color-primary);
@@ -524,6 +566,104 @@ p{
 .mt-3 { margin-top: 1.5rem; }
 .mt-4 { margin-top: 2rem; }
 .mb-4 { margin-bottom: 2rem; }
+
+/* Agrega este keyframe al final del archivo */
+@keyframes autoSlide {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Modifica .carousel-slide.active para usar la animación */
+.carousel-indicator {
+  opacity: 1;
+  transform: translateX(0);
+  animation: autoSlide 0.5s ease-out both;
+}
+
+@keyframes heroIntro {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes featureCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes featureFloat {
+  0%, 100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+@keyframes iconPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes softFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ctaPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(20, 141, 141, 0.26);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(20, 141, 141, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 
 /* Responsive */
 @media (max-width: 768px) {
