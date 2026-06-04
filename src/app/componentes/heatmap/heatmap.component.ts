@@ -47,12 +47,14 @@ const HEATMAP_WIDTH = 1280;
   styles: [`
     .heatmap-wrapper {
       width: 100%;
-      height: 700px;
+      height: min(700px, calc(100vh - 190px));
+      min-height: 420px;
       position: relative;
       background: #f8f9fa;
       border: 1px solid #eaeaea;
       border-radius: 8px;
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .heatmap-toolbar {
       position: sticky;
@@ -92,6 +94,7 @@ const HEATMAP_WIDTH = 1280;
       position: relative;
       margin: 0 auto;
       min-height: 600px;
+      transform-origin: top center;
     }
     .bg-iframe {
       position: absolute;
@@ -131,6 +134,47 @@ const HEATMAP_WIDTH = 1280;
       z-index: 5;
     }
     .error-msg { color: #dc2626; background: #fee2e2; border-radius: 8px; }
+
+    @media (max-width: 900px) {
+      .heatmap-wrapper {
+        height: min(640px, calc(100vh - 170px));
+        min-height: 380px;
+        border-radius: 8px;
+      }
+
+      .heatmap-toolbar {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin-inline: 10px;
+        justify-content: stretch;
+      }
+
+      .heatmap-toolbar button {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .heatmap-wrapper {
+        height: min(560px, calc(100vh - 150px));
+        min-height: 340px;
+      }
+
+      .heatmap-toolbar {
+        top: 8px;
+        gap: 6px;
+      }
+
+      .heatmap-toolbar button {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .loading, .error-msg {
+        width: calc(100% - 32px);
+      }
+    }
   `]
 })
 export class HeatmapComponent implements AfterViewInit, OnChanges {

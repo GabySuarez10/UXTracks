@@ -371,3 +371,145 @@
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@media (max-width: 900px) {
+  .feedback-container {
+    padding: 8px 0 16px;
+  }
+
+  .feedback-title {
+    font-size: 38px;
+  }
+
+  .feedback-subtitle,
+  .url-highlight {
+    overflow-wrap: anywhere;
+  }
+
+  .feedback-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .stat-card {
+    padding: 18px;
+  }
+
+  .feedback-section-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 720px) {
+  .feedback-header {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+  }
+
+  .feedback-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 14px;
+    align-items: center;
+  }
+
+  .stat-icon {
+    margin-bottom: 0;
+  }
+
+  .progress-bar-bg {
+    grid-column: 1 / -1;
+    margin-top: 14px;
+  }
+
+  .distribution-bar {
+    height: auto;
+    min-height: 32px;
+    flex-wrap: wrap;
+    border-radius: 10px;
+  }
+
+  .dist-segment {
+    min-width: 56px;
+    min-height: 32px;
+    padding-inline: 8px;
+  }
+
+  .distribution-legend {
+    justify-content: flex-start;
+    gap: 10px 16px;
+  }
+
+  .comment-item {
+    gap: 12px;
+  }
+
+  .comment-meta {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+}
+
+@media (max-width: 520px) {
+  .feedback-title {
+    font-size: 34px;
+  }
+
+  .feedback-subtitle {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .feedback-empty-state {
+    padding: 42px 18px;
+    border-radius: 12px;
+  }
+
+  .feedback-section-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .section-card-desc {
+    line-height: 1.45;
+  }
+
+  .comment-item {
+    flex-direction: column;
+    padding: 14px;
+  }
+
+  .comment-badge {
+    width: 36px;
+    height: 36px;
+  }
+
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .comment-text,
+  .comment-question,
+  .meta-val {
+    overflow-wrap: anywhere;
+  }
+
+  .meta-separator {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .stat-card {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-icon {
+    margin-bottom: 8px;
+  }
+}

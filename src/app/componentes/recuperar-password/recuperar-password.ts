@@ -85,6 +85,10 @@ export class RecuperarPassword {
         .subscribe({
           next: (response) => {
             this.isLoading = false;
+            if (response.emailError) {
+              this.errorMessage = response.message || 'El codigo fue generado, pero no se pudo enviar al correo';
+              return;
+            }
             this.successMessage = response.message;
             this.currentStep = 2;
             this.startResendCooldown();
@@ -198,8 +202,12 @@ export class RecuperarPassword {
     this.authService.requestPasswordRecovery(this.email)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: () => {
+        next: (response) => {
           this.isLoading = false;
+          if (response.emailError) {
+            this.errorMessage = response.message || 'El codigo fue generado, pero no se pudo reenviar al correo';
+            return;
+          }
           this.successMessage = 'Código reenviado exitosamente';
           this.startResendCooldown();
           // Limpiar inputs de código

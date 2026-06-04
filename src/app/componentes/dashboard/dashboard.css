@@ -791,9 +791,10 @@
 ══════════════════════════════════════ */
 .trend-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 0;
+  min-width: 0;
 }
 
 .trend-card {
@@ -804,6 +805,8 @@
   padding: 20px 20px 16px;
   animation: cardIn .5s var(--ease) both;
   transition: box-shadow .2s, transform .2s;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .trend-card:hover {
@@ -816,6 +819,7 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 14px;
+  min-width: 0;
 }
 
 .trend-card__dot {
@@ -830,6 +834,9 @@
   font-weight: 300;
   color: var(--navy);
   flex: 4;
+  min-width: 0;
+  line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .trend-card__period {
@@ -838,15 +845,25 @@
   background: var(--bg);
   padding: 3px 10px;
   border-radius: 99px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .trend-chart-wrap {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border-radius: var(--r-sm);
-  /* overflow: visible to show tooltips */
-  overflow: visible;
+  overflow: hidden;
   padding-top: 34px;
   /* Space for tooltips */
+}
+
+.trend-chart-wrap canvas {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 
 .trend-svg {
@@ -917,12 +934,16 @@
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid var(--border);
+  gap: 12px;
+  min-width: 0;
 }
 
 .trend-card__last,
 .trend-card__max {
   font-size: .95rem;
   color: var(--muted);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .trend-card__last strong,
@@ -1318,7 +1339,7 @@
 /* Tablet ancho */
 @media (max-width: 1200px) {
   .trend-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
   }
 
@@ -1361,7 +1382,7 @@
   }
 
   .trend-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1861,4 +1882,223 @@
 .export-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+/* Responsive polish: keeps the current visual system while preventing tight layouts */
+@media (max-width: 1180px) {
+  .main {
+    padding: 30px 28px;
+  }
+
+  .chart__title {
+    font-size: 1.7rem;
+    letter-spacing: 2px;
+  }
+}
+
+@media (max-width: 900px) {
+  .topbar__nav {
+    gap: 12px;
+  }
+
+  .topbar__btn {
+    padding: 10px 16px;
+    font-size: 1rem;
+  }
+
+  .section__header {
+    align-items: stretch;
+  }
+
+  .section__header > div {
+    min-width: 0;
+  }
+
+  .section__subtitle {
+    overflow-wrap: anywhere;
+  }
+
+  .export-btn {
+    align-self: flex-start;
+  }
+
+  .date-filter__pills {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .date-filter__pill {
+    justify-content: center;
+    padding-inline: 12px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar__logo {
+    font-size: 3.4rem;
+  }
+
+  .topbar__nav {
+    margin-left: auto;
+  }
+
+  .topbar__btn {
+    white-space: nowrap;
+  }
+
+  .section__header {
+    margin-bottom: 22px;
+  }
+
+  .date-filter {
+    padding: 14px;
+    margin-bottom: 20px;
+  }
+
+  .date-filter__active-label {
+    align-items: flex-start;
+    line-height: 1.45;
+  }
+
+  .chart-wrapper,
+  .histogram-card {
+    scrollbar-width: thin;
+  }
+
+  .chart {
+    min-width: 420px;
+  }
+
+  .chart__bars {
+    gap: 14px;
+  }
+
+  .trend-card__header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .trend-card__title,
+  .trend-card__period,
+  .ucard__label,
+  .ucard__hint,
+  .ucard__bar-caption {
+    overflow-wrap: anywhere;
+  }
+
+  .ucard {
+    padding: 20px;
+  }
+
+  .trend-card {
+    padding: 18px 16px 14px;
+  }
+
+  .trend-card__title {
+    font-size: 2rem;
+  }
+
+  .trend-card__period {
+    white-space: normal;
+  }
+
+  .trend-chart-wrap {
+    padding-top: 18px;
+  }
+
+  .trend-card__foot {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    gap: 10px;
+  }
+
+  .topbar__logo {
+    font-size: 3rem;
+  }
+
+  .topbar__btn {
+    padding: 9px 12px;
+    font-size: .92rem;
+  }
+
+  .section__title {
+    font-size: 2.35rem;
+    overflow-wrap: anywhere;
+  }
+
+  .section__subtitle {
+    font-size: .95rem;
+  }
+
+  .date-filter__pills {
+    grid-template-columns: 1fr;
+  }
+
+  .date-input,
+  .date-input-wrap {
+    width: 100%;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: 150px;
+  }
+
+  .chart-wrapper {
+    padding: 16px 12px;
+  }
+
+  .chart-header {
+    align-items: flex-start;
+  }
+
+  .chart__title {
+    font-size: 1.35rem;
+    letter-spacing: 1px;
+  }
+
+  .section-divider__label {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .trend-card {
+    padding: 16px 14px;
+  }
+
+  .trend-card__title {
+    font-size: 1.7rem;
+    flex-basis: calc(100% - 20px);
+  }
+
+  .trend-chart-wrap {
+    height: 130px !important;
+    padding-top: 10px;
+  }
+
+  .ucard__scroll-display {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}
+
+@media (max-width: 360px) {
+  .main {
+    padding-inline: 12px;
+  }
+
+  .topbar__btn {
+    max-width: 112px;
+    white-space: normal;
+    line-height: 1.1;
+  }
 }
