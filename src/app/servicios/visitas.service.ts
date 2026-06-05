@@ -12,8 +12,7 @@ export class VisitasService {
     private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     public get baseUrl(): string {
-        // Devuelve la URL base de la API quitando el path final si es necesario
-        return this.apiUrl.split('/rutas')[0] || this.apiUrl;
+        return this.apiUrl;
     }
 
     constructor(
