@@ -8,8 +8,8 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class VisitasService {
 
-    // private apiUrl = 'http://localhost:3000/rutas';
     private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
+    // private apiUrl: string = 'http://localhost:3000/rutas';
 
     public get baseUrl(): string {
         return this.apiUrl;
@@ -52,7 +52,7 @@ export class VisitasService {
         height: number;
         clics: any[];
         scrolls: any[];
-        snapshot?: string | null;
+        snapshot?: { snapshot: string; width: number; height: number } | null;
     }> {
 
         let params = new HttpParams().set('url', url);
@@ -70,7 +70,7 @@ export class VisitasService {
             height: number;
             clics: any[];
             scrolls: any[];
-            snapshot?: string | null;
+            snapshot?: { snapshot: string; width: number; height: number } | null;
         }>(
             `${this.apiUrl}/heatmaps`,
             { params }

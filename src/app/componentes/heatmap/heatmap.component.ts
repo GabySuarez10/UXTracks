@@ -23,10 +23,8 @@ const HEATMAP_WIDTH = 1280;
         <button (click)="toggleViewMode('scrolls')" [class.active]="viewMode === 'scrolls'">Scrolls</button>
       </div>
 
-      <!-- Contenedor principal overlayed -->
       <div class="heatmap-container-wrapper" [style.width.px]="containerWidth" [style.height.px]="containerHeight">
         
-        <!-- IFrame de fondo (Modo Principal) -->
         <iframe
           *ngIf="backgroundMode === 'iframe' && safeSiteUrl"
           [src]="safeSiteUrl"
@@ -38,7 +36,6 @@ const HEATMAP_WIDTH = 1280;
           (error)="onIframeError()">
         </iframe>
 
-        <!-- Modo screenshot (Fallback) -->
         <img
           *ngIf="backgroundMode === 'screenshot' && screenshotUrl"
           [src]="screenshotUrl"
@@ -46,13 +43,10 @@ const HEATMAP_WIDTH = 1280;
           [style.width.px]="containerWidth"
           alt="Screenshot del sitio" />
 
-        <!-- Filtro transparente para homogeneizar y evitar interferencia de clicks sobre la web real si se requiere -->
         <div class="heatmap-overlay"></div>
 
-        <!-- Canvas del Heatmap -->
         <div class="heatmap-container" #heatmapContainer></div>
 
-        <!-- Indicador de carga del screenshot -->
         <div *ngIf="screenshotLoading" class="screenshot-loading">
           Generando captura del sitio...
         </div>
@@ -229,14 +223,13 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   rawData: { clics: any[], scrolls: any[] } = { clics: [], scrolls: [] };
   safeSiteUrl: SafeResourceUrl | null = null;
 
-  // Variables para el sistema híbrido de renderizado
   iframeBlocked = false;
   screenshotUrl = '';
+  dbSnapshot = '';
   backgroundMode: 'iframe' | 'screenshot' = 'iframe';
   screenshotLoading = false;
   private iframeCheckTimeout: any;
 
-  // Dimensiones dinámicas
   containerWidth: number = HEATMAP_WIDTH;
   containerHeight: number = 1200;
 
@@ -248,15 +241,14 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['siteUrl'] && this.siteUrl) {
-      // Reiniciar estado híbrido al cambiar la URL
       this.iframeBlocked = false;
       this.backgroundMode = 'iframe';
       this.screenshotUrl = '';
+      this.dbSnapshot = '';
       clearTimeout(this.iframeCheckTimeout);
 
       this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.siteUrl);
       
-      // Iniciar timeout de detección de bloqueo
       this.iframeCheckTimeout = setTimeout(() => {
         if (!this.iframeBlocked && this.backgroundMode === 'iframe') {
           console.warn('Iframe timeout detectado - cambiando a screenshot fallback');
@@ -291,10 +283,15 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   private switchToScreenshot(): void {
     if (this.iframeBlocked) return;
-    
     this.iframeBlocked = true;
+
+    if (this.dbSnapshot) {
+      this.screenshotUrl = this.dbSnapshot;
+      this.backgroundMode = 'screenshot';
+      return;
+    }
+
     this.screenshotLoading = true;
-    
     this.http.post<any>(`${this.visitasService.baseUrl}/screenshot`, {
       url: this.siteUrl
     }).subscribe({
@@ -352,7 +349,11 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
         setTimeout(() => {
           this.loading = false;
           this.rawData = data;
-          
+
+          if (data.snapshot?.snapshot) {
+            this.dbSnapshot = data.snapshot.snapshot;
+          }
+
           this.calculateDimensions();
           this.initHeatmap();
           this.renderHeatmap();
