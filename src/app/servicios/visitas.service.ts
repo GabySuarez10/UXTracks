@@ -8,8 +8,8 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class VisitasService {
 
-    private apiUrl: string = 'http://localhost:3000/rutas';
-    // private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
+    // private apiUrl: string = 'http://192.168.1.81:3000/rutas';
+    private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     public get baseUrl(): string {
         return this.apiUrl;
