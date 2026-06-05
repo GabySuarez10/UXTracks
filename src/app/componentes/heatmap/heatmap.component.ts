@@ -26,21 +26,36 @@ const HEATMAP_WIDTH = 1280;
       <!-- Contenedor principal overlayed -->
       <div class="heatmap-container-wrapper" [style.width.px]="containerWidth" [style.height.px]="containerHeight">
         
-        <!-- IFrame de fondo para renderizar la web real como un elemento estático -->
+        <!-- IFrame de fondo (Modo Principal) -->
         <iframe
-          *ngIf="safeSiteUrl"
+          *ngIf="backgroundMode === 'iframe' && safeSiteUrl"
           [src]="safeSiteUrl"
           class="bg-iframe"
           scrolling="no"
           [style.width.px]="containerWidth"
-          [style.height.px]="containerHeight">
+          [style.height.px]="containerHeight"
+          (load)="onIframeLoad($event)"
+          (error)="onIframeError()">
         </iframe>
+
+        <!-- Modo screenshot (Fallback) -->
+        <img
+          *ngIf="backgroundMode === 'screenshot' && screenshotUrl"
+          [src]="screenshotUrl"
+          class="bg-screenshot"
+          [style.width.px]="containerWidth"
+          alt="Screenshot del sitio" />
 
         <!-- Filtro transparente para homogeneizar y evitar interferencia de clicks sobre la web real si se requiere -->
         <div class="heatmap-overlay"></div>
 
         <!-- Canvas del Heatmap -->
         <div class="heatmap-container" #heatmapContainer></div>
+
+        <!-- Indicador de carga del screenshot -->
+        <div *ngIf="screenshotLoading" class="screenshot-loading">
+          Generando captura del sitio...
+        </div>
       </div>
     </div>
   `,
@@ -135,6 +150,31 @@ const HEATMAP_WIDTH = 1280;
     }
     .error-msg { color: #dc2626; background: #fee2e2; border-radius: 8px; }
 
+    .bg-screenshot {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      z-index: 1;
+      pointer-events: none;
+      object-fit: contain;
+      object-position: top left;
+    }
+
+    .screenshot-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.9);
+      padding: 16px 24px;
+      border-radius: 8px;
+      z-index: 5;
+      font-size: 14px;
+      color: #64748b;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
     @media (max-width: 900px) {
       .heatmap-wrapper {
         height: min(640px, calc(100vh - 170px));
@@ -189,6 +229,13 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   rawData: { clics: any[], scrolls: any[] } = { clics: [], scrolls: [] };
   safeSiteUrl: SafeResourceUrl | null = null;
 
+  // Variables para el sistema híbrido de renderizado
+  iframeBlocked = false;
+  screenshotUrl = '';
+  backgroundMode: 'iframe' | 'screenshot' = 'iframe';
+  screenshotLoading = false;
+  private iframeCheckTimeout: any;
+
   // Dimensiones dinámicas
   containerWidth: number = HEATMAP_WIDTH;
   containerHeight: number = 1200;
@@ -201,11 +248,71 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['siteUrl'] && this.siteUrl) {
+      // Reiniciar estado híbrido al cambiar la URL
+      this.iframeBlocked = false;
+      this.backgroundMode = 'iframe';
+      this.screenshotUrl = '';
+      clearTimeout(this.iframeCheckTimeout);
+
       this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.siteUrl);
+      
+      // Iniciar timeout de detección de bloqueo
+      this.iframeCheckTimeout = setTimeout(() => {
+        if (!this.iframeBlocked && this.backgroundMode === 'iframe') {
+          console.warn('Iframe timeout detectado - cambiando a screenshot fallback');
+          this.switchToScreenshot();
+        }
+      }, 5000);
+
       if (this.heatmapInstance) {
         this.loadData();
       }
     }
+  }
+
+  onIframeLoad(event: Event): void {
+    const iframe = event.target as HTMLIFrameElement;
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (doc && doc.body) {
+        clearTimeout(this.iframeCheckTimeout);
+        return;
+      }
+    } catch (e) {
+      clearTimeout(this.iframeCheckTimeout);
+      return;
+    }
+  }
+
+  onIframeError(): void {
+    clearTimeout(this.iframeCheckTimeout);
+    this.switchToScreenshot();
+  }
+
+  private switchToScreenshot(): void {
+    if (this.iframeBlocked) return;
+    
+    this.iframeBlocked = true;
+    this.screenshotLoading = true;
+    
+    this.http.post<any>(`${this.visitasService.baseUrl}/screenshot`, {
+      url: this.siteUrl
+    }).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.screenshotUrl = `${this.visitasService.baseUrl}/screenshot?file=${res.screenshotFile}`;
+          this.backgroundMode = 'screenshot';
+          if (res.height) {
+            this.containerHeight = Math.max(this.containerHeight, res.height);
+          }
+        }
+        this.screenshotLoading = false;
+      },
+      error: () => {
+        this.screenshotLoading = false;
+        console.error('No se pudo obtener el screenshot fallback');
+      }
+    });
   }
 
   ngAfterViewInit() {
