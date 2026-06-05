@@ -21,6 +21,8 @@ const HEATMAP_WIDTH = 1280;
       <div class="heatmap-toolbar" *ngIf="!loading && !error">
         <button (click)="toggleViewMode('clics')" [class.active]="viewMode === 'clics'">Clics</button>
         <button (click)="toggleViewMode('scrolls')" [class.active]="viewMode === 'scrolls'">Scrolls</button>
+        <button (click)="forceScreenshot()" *ngIf="backgroundMode === 'iframe'" style="margin-left:auto; background-color:#ff4444; color:white;">Usar Captura (Si el fondo está blanco)</button>
+        <button (click)="restoreIframe()" *ngIf="backgroundMode === 'screenshot'" style="margin-left:auto; background-color:#4CAF50; color:white;">Usar Iframe Original</button>
       </div>
 
       <div class="heatmap-container-wrapper" [style.width.px]="containerWidth" [style.height.px]="containerHeight">
@@ -41,6 +43,7 @@ const HEATMAP_WIDTH = 1280;
           [src]="screenshotUrl"
           class="bg-screenshot"
           [style.width.px]="containerWidth"
+          [style.height.px]="containerHeight"
           alt="Screenshot del sitio" />
 
         <div class="heatmap-overlay"></div>
@@ -233,6 +236,10 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   containerWidth: number = HEATMAP_WIDTH;
   containerHeight: number = 1200;
 
+  // Dimensiones REALES de la página original (las que reportó el navegador del visitante)
+  originalPageWidth: number = HEATMAP_WIDTH;
+  originalPageHeight: number = 1200;
+
   constructor(
     private visitasService: VisitasService,
     private sanitizer: DomSanitizer,
@@ -279,6 +286,18 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   onIframeError(): void {
     clearTimeout(this.iframeCheckTimeout);
     this.switchToScreenshot();
+  }
+
+  forceScreenshot(): void {
+    clearTimeout(this.iframeCheckTimeout);
+    this.iframeBlocked = false; // Allow manual override
+    this.switchToScreenshot();
+  }
+
+  restoreIframe(): void {
+    this.iframeBlocked = false;
+    this.backgroundMode = 'iframe';
+    this.screenshotUrl = '';
   }
 
   private switchToScreenshot(): void {
@@ -352,6 +371,12 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
           if (data.snapshot?.snapshot) {
             this.dbSnapshot = data.snapshot.snapshot;
+            // Usar las dimensiones reales de la página que envió el script
+            if (data.snapshot.width && data.snapshot.height) {
+              this.originalPageWidth = Number(data.snapshot.width);
+              this.originalPageHeight = Number(data.snapshot.height);
+              console.log(`Dimensiones originales de página: ${this.originalPageWidth}x${this.originalPageHeight}`);
+            }
           }
 
           this.calculateDimensions();
@@ -370,29 +395,32 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
   }
 
   calculateDimensions() {
-    let maxPageHeight = 1200; // fall-back inicial
+    const scaleFactor = this.containerWidth / this.originalPageWidth;
+
+    // Buscar la altura máxima entre: dimensiones del snapshot, page_height de clics, posicion_y de clics, scroll_y
+    let maxOriginalHeight = this.originalPageHeight;
     
     if (this.rawData.clics && this.rawData.clics.length > 0) {
       this.rawData.clics.forEach((clic: any) => {
-        if (clic.posicion_y && Number(clic.posicion_y) > maxPageHeight) {
-          maxPageHeight = Number(clic.posicion_y);
+        if (clic.page_height && Number(clic.page_height) > maxOriginalHeight) {
+          maxOriginalHeight = Number(clic.page_height);
         }
-        if (clic.page_height && Number(clic.page_height) > maxPageHeight) {
-          maxPageHeight = Number(clic.page_height);
+        if (clic.posicion_y && Number(clic.posicion_y) > maxOriginalHeight) {
+          maxOriginalHeight = Number(clic.posicion_y);
         }
       });
     }
 
     if (this.rawData.scrolls && this.rawData.scrolls.length > 0) {
       this.rawData.scrolls.forEach((scroll: any) => {
-        if (scroll.scroll_y && Number(scroll.scroll_y) > maxPageHeight) {
-          maxPageHeight = Number(scroll.scroll_y);
+        if (scroll.scroll_y && Number(scroll.scroll_y) > maxOriginalHeight) {
+          maxOriginalHeight = Number(scroll.scroll_y);
         }
       });
     }
 
-    // Le sumamos 200px de margen de seguridad
-    this.containerHeight = maxPageHeight + 200;
+    this.containerHeight = (maxOriginalHeight * scaleFactor) + 100;
+    console.log(`Container: ${this.containerWidth}x${this.containerHeight}, scaleFactor: ${scaleFactor}, originalPage: ${this.originalPageWidth}x${maxOriginalHeight}`);
   }
 
   toggleViewMode(mode: 'clics' | 'scrolls') {
@@ -421,15 +449,15 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
           let scaledX = Number(clic.posicion_x);
           let scaledY = Number(clic.posicion_y);
 
-          // Normalizar coordenadas usando el viewport_width original del visitante
-          if (clic.viewport_width && Number(clic.viewport_width) > 0) {
-            scaledX = (scaledX / Number(clic.viewport_width)) * this.containerWidth;
-          } else {
-            // Fallback de escala por defecto
-            const scaleFactor = this.containerWidth / HEATMAP_WIDTH;
-            scaledX = scaledX * scaleFactor;
-            scaledY = scaledY * scaleFactor;
-          }
+          // Usar SIEMPRE las dimensiones originales de la página para escalar
+          // Esto garantiza que clics y screenshot se alineen perfectamente
+          const referenceWidth = (clic.page_width && Number(clic.page_width) > 0) 
+            ? Number(clic.page_width) 
+            : this.originalPageWidth;
+          
+          const scaleFactor = this.containerWidth / referenceWidth;
+          scaledX = scaledX * scaleFactor;
+          scaledY = scaledY * scaleFactor;
 
           if (
             scaledX >= 0 &&
@@ -455,7 +483,9 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
     else if (this.viewMode === 'scrolls' && this.rawData.scrolls) {
       this.rawData.scrolls.forEach((scroll: any) => {
         if (scroll.scroll_y != null) {
-          let scaledY = Number(scroll.scroll_y);
+          let originalY = Number(scroll.scroll_y);
+          const scaleFactor = this.containerWidth / this.originalPageWidth;
+          let scaledY = originalY * scaleFactor;
 
           if (
             scaledY >= 0 &&
