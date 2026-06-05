@@ -2,7 +2,8 @@
   <div class="feedback-header">
     <div class="feedback-title-group">
       <h2 class="feedback-title">Opiniones y Feedback</h2>
-      <p class="feedback-subtitle">Respuestas de los feedbacks recolectados de la página: <span class="url-highlight">{{ siteUrl }}</span></p>
+      <p class="feedback-subtitle">Respuestas de los feedbacks recolectados de la página: <span class="url-highlight">{{
+          siteUrl }}</span></p>
     </div>
   </div>
 
@@ -21,7 +22,8 @@
     <div *ngIf="feedbacks.length === 0" class="feedback-empty-state">
       <div class="empty-icon">💬</div>
       <h3>No hay feedbacks registrados</h3>
-      <p>Aún no se ha recolectado feedback para esta página. El popup se mostrará a los usuarios que cumplan las condiciones de navegación.</p>
+      <p>Aún no se ha recolectado feedback para esta página. El feedback se mostrará a los usuarios que cumplan las
+        condiciones de navegación.</p>
     </div>
 
     <div *ngIf="feedbacks.length > 0">
@@ -67,16 +69,20 @@
       <!-- Distribution block -->
       <div class="feedback-section-card">
         <h3 class="section-card-title">Distribución de Satisfacción</h3>
-        <p class="section-card-desc">Proporción general de respuestas recolectadas (Total: {{ totalCount }} respuestas)</p>
-        
+        <p class="section-card-desc">Proporción general de respuestas recolectadas (Total: {{ totalCount }} respuestas)
+        </p>
+
         <div class="distribution-bar">
-          <div class="dist-segment satisfied-segment" [style.width.%]="satisfechoPercent" *ngIf="satisfechoCount > 0" title="Satisfecho: {{satisfechoPercent}}%">
+          <div class="dist-segment satisfied-segment" [style.width.%]="satisfechoPercent" *ngIf="satisfechoCount > 0"
+            title="Satisfecho: {{satisfechoPercent}}%">
             <span>{{ satisfechoPercent }}%</span>
           </div>
-          <div class="dist-segment neutral-segment" [style.width.%]="neutralPercent" *ngIf="neutralCount > 0" title="Neutral: {{neutralPercent}}%">
+          <div class="dist-segment neutral-segment" [style.width.%]="neutralPercent" *ngIf="neutralCount > 0"
+            title="Neutral: {{neutralPercent}}%">
             <span>{{ neutralPercent }}%</span>
           </div>
-          <div class="dist-segment unsatisfied-segment" [style.width.%]="insatisfechoPercent" *ngIf="insatisfechoCount > 0" title="Insatisfecho: {{insatisfechoPercent}}%">
+          <div class="dist-segment unsatisfied-segment" [style.width.%]="insatisfechoPercent"
+            *ngIf="insatisfechoCount > 0" title="Insatisfecho: {{insatisfechoPercent}}%">
             <span>{{ insatisfechoPercent }}%</span>
           </div>
         </div>
@@ -91,10 +97,12 @@
       <!-- Comments Timeline / List -->
       <div class="feedback-section-card">
         <h3 class="section-card-title">Comentarios y Sugerencias</h3>
-        <p class="section-card-desc">Opiniones detalladas proporcionadas por los usuarios (Total: {{ filteredComments.length }} comentarios)</p>
+        <p class="section-card-desc">Opiniones detalladas proporcionadas por los usuarios (Total: {{
+          filteredComments.length }} comentarios)</p>
 
         <div *ngIf="filteredComments.length === 0" class="no-comments-message">
-          <p>No se han ingresado comentarios de texto todavía. Los usuarios que marcan "Neutral" o "Insatisfecho" tienen la opción de dejar un mensaje.</p>
+          <p>No se han ingresado comentarios de texto todavía. Los usuarios que marcan "Neutral" o "Insatisfecho" tienen
+            la opción de dejar un mensaje.</p>
         </div>
 
         <div *ngIf="filteredComments.length > 0" class="comments-list">
@@ -111,9 +119,11 @@
                 "{{ comment.comment }}"
               </div>
               <div class="comment-meta">
-                <span class="meta-label">Sesión:</span> <span class="meta-val">{{ comment.session_id.slice(0, 12) }}...</span>
+                <span class="meta-label">Sesión:</span> <span class="meta-val">{{ comment.session_id.slice(0, 12)
+                  }}...</span>
                 <span class="meta-separator">|</span>
-                <span class="meta-label">Calificación:</span> <span class="meta-val highlight-val" [ngClass]="comment.response">{{ getResponseLabel(comment.response) }}</span>
+                <span class="meta-label">Calificación:</span> <span class="meta-val highlight-val"
+                  [ngClass]="comment.response">{{ getResponseLabel(comment.response) }}</span>
               </div>
             </div>
           </div>

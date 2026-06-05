@@ -26,7 +26,7 @@
 
 .url-highlight {
   color: #6b8795;
- 
+
 }
 
 /* Loading and Error States */
@@ -50,7 +50,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .feedback-error {
@@ -91,10 +93,10 @@
 }
 
 .feedback-empty-state h3 {
-  font-size: 20px;
+  font-size: 30px;
   color: #0E2C40;
   margin-bottom: 8px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .feedback-empty-state p {
@@ -198,19 +200,35 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   transform: translateX(-100%);
   animation: progressShine 2.8s ease-in-out infinite;
 }
 
-.satisfied-fill { background: linear-gradient(90deg, #10b981, #34d399); }
-.neutral-fill { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-.unsatisfied-fill { background: linear-gradient(90deg, #ef4444, #f87171); }
+.satisfied-fill {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.neutral-fill {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.unsatisfied-fill {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
 
 /* Card styles based on feedback value */
-.stat-card.satisfied { border-left: 5px solid #10b981; }
-.stat-card.neutral { border-left: 5px solid #f59e0b; }
-.stat-card.unsatisfied { border-left: 5px solid #ef4444; }
+.stat-card.satisfied {
+  border-left: 5px solid #10b981;
+}
+
+.stat-card.neutral {
+  border-left: 5px solid #f59e0b;
+}
+
+.stat-card.unsatisfied {
+  border-left: 5px solid #ef4444;
+}
 
 /* Sections */
 .feedback-section-card {
@@ -224,7 +242,7 @@
 }
 
 .section-card-title {
-   font-family: 'Jomhuria', sans-serif;
+  font-family: 'Jomhuria', sans-serif;
   font-size: 35px;
   color: #0E2C40;
   line-height: 1;
@@ -257,13 +275,21 @@
   color: white;
   font-size: 12px;
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.satisfied-segment { background: #10b981; }
-.neutral-segment { background: #f59e0b; }
-.unsatisfied-segment { background: #ef4444; }
+.satisfied-segment {
+  background: #10b981;
+}
+
+.neutral-segment {
+  background: #f59e0b;
+}
+
+.unsatisfied-segment {
+  background: #ef4444;
+}
 
 .distribution-legend {
   display: flex;
@@ -287,9 +313,17 @@
   animation: dotPulse 2.6s ease-in-out infinite;
 }
 
-.satisfied-dot { background: #10b981; }
-.neutral-dot { background: #f59e0b; }
-.unsatisfied-dot { background: #ef4444; }
+.satisfied-dot {
+  background: #10b981;
+}
+
+.neutral-dot {
+  background: #f59e0b;
+}
+
+.unsatisfied-dot {
+  background: #ef4444;
+}
 
 /* Timeline comments */
 .no-comments-message {
@@ -342,12 +376,23 @@
   justify-content: center;
   font-size: 22px;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.comment-badge.satisfied { background: #d1fae5; border: 1.5px solid #a7f3d0; }
-.comment-badge.neutral { background: #fef3c7; border: 1.5px solid #fde68a; }
-.comment-badge.insatisfecho { background: #fee2e2; border: 1.5px solid #fecaca; }
+.comment-badge.satisfied {
+  background: #d1fae5;
+  border: 1.5px solid #a7f3d0;
+}
+
+.comment-badge.neutral {
+  background: #fef3c7;
+  border: 1.5px solid #fde68a;
+}
+
+.comment-badge.insatisfecho {
+  background: #fee2e2;
+  border: 1.5px solid #fecaca;
+}
 
 .comment-body {
   flex-grow: 1;
@@ -407,13 +452,31 @@
   color: #d1dde3;
 }
 
-.highlight-val.satisfied { color: #10b981; font-weight: 700; }
-.highlight-val.neutral { color: #d97706; font-weight: 700; }
-.highlight-val.insatisfecho { color: #dc2626; font-weight: 700; }
+.highlight-val.satisfied {
+  color: #10b981;
+  font-weight: 700;
+}
+
+.highlight-val.neutral {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.highlight-val.insatisfecho {
+  color: #dc2626;
+  font-weight: 700;
+}
 
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes feedbackSlideIn {
@@ -441,11 +504,14 @@
 }
 
 @keyframes progressShine {
-  0%, 45% {
+
+  0%,
+  45% {
     transform: translateX(-100%);
   }
 
-  70%, 100% {
+  70%,
+  100% {
     transform: translateX(100%);
   }
 }
@@ -463,7 +529,9 @@
 }
 
 @keyframes dotPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(20, 141, 141, 0);
   }
 
@@ -473,7 +541,9 @@
 }
 
 @keyframes emptyFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
 
@@ -483,6 +553,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

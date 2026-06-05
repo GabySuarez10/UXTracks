@@ -69,7 +69,7 @@ export class VincularSitio implements OnInit {
 
   // Mostrar script
   private updateScript(): void {
-    this.generatedScript = `<script src="https://cdn.jsdelivr.net/gh/GabySuarez10/scriptUXT/scriptUXT.js"></script>`;
+    this.generatedScript = `<script src="https://cdn.jsdelivr.net/gh/GabySuarez10/scriptUXT/scriptV13.js"></script>`;
   }
 
   // Getter para el control del nombre
