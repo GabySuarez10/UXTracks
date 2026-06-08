@@ -261,7 +261,7 @@ confirmDeleteSite(): void {
 
   onGoToManual(): void {
     console.log('Ir al manual');
-    window.open('/Manual de Usuario UXTracks.pdf', '_blank');
+    window.open('https://uxt-api-1.onrender.com/Manual%20de%20Usuario%20UXTracks.pdf', '_blank');
   }
 
 
