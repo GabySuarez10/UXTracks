@@ -261,7 +261,7 @@ confirmDeleteSite(): void {
 
   onGoToManual(): void {
     console.log('Ir al manual');
-    this.router.navigate(['/instrucciones']);
+    window.open('/Manual de Usuario UXTracks.pdf', '_blank');
   }
 
 
