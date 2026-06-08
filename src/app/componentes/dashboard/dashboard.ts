@@ -132,6 +132,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   displayAvgClicks = 0;
   avgScrollPercent = 0;
   displayScrollPct = 0;
+  avgTimeOnPage = 0;
+  displayAvgTime = 0;
 
   /* ---- Tendencias (Chart.js) ---- */
   trendSeries: LineSeriesConfig[] = [];
@@ -190,6 +192,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
         this.avgClicksPerUser = this.stats.visits > 0 ? (this.stats.clicks / this.stats.visits) : 0;
         this.avgScrollPercent = res.porcentajeScroll || 0;
+        this.avgTimeOnPage = res.tiempoPromedio || 0;
         this.animateUserMetrics();
 
         // Build charts from real daily data
@@ -231,6 +234,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private animateUserMetrics(): void {
     this.animateValue(0, this.avgClicksPerUser, 1100, v => { this.displayAvgClicks = Math.round(v * 10) / 10; });
     this.animateValue(0, this.avgScrollPercent, 1100, v => { this.displayScrollPct = Math.round(v); });
+    this.animateValue(0, this.avgTimeOnPage, 1100, v => { this.displayAvgTime = Math.round(v); });
   }
 
   private animateValue(from: number, to: number, duration: number, setter: (v: number) => void): void {
@@ -244,10 +248,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   formatTime(seconds: number): string {
-    if (seconds < 60) return `${seconds}s`;
-    const m = Math.floor(seconds / 60);
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
-    return s > 0 ? `${m}m ${s}s` : `${m}m`;
+
+    let result = '';
+    if (h > 0) result += `${h}h `;
+    if (m > 0 || h > 0) result += `${m}m `;
+    result += `${s}s`;
+
+    return result.trim();
   }
 
   /* ---- Gráficas de línea (Chart.js) ---- */

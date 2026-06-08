@@ -8,7 +8,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class VisitasService {
 
-    // private apiUrl: string = 'http://192.168.1.81:3000/rutas';
+    //private apiUrl: string = 'http://localhost:3000/rutas';
     private apiUrl: string = 'https://uxt-api-1.onrender.com/rutas';
 
     public get baseUrl(): string {
@@ -94,6 +94,7 @@ export class VisitasService {
         visits: number;
         recurrent: number;
         porcentajeScroll: number;
+        tiempoPromedio: number;
         tendencias: {
             clics: { fecha: string, total: number }[];
             scrolls: { fecha: string, total: number }[];
@@ -121,6 +122,7 @@ export class VisitasService {
                     visits: res.visitas || 0,
                     recurrent: res.recurrentes || 0,
                     porcentajeScroll: res.porcentajeScroll || 0,
+                    tiempoPromedio: res.tiempoPromedio || 0,
                     tendencias: res.tendencias || {
                         clics: [],
                         scrolls: [],

@@ -367,6 +367,28 @@
           </div>
         </article>
 
+        <!-- Card: tiempo en página -->
+        <article class="ucard" aria-label="Tiempo promedio en página">
+          <div class="ucard__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <div class="ucard__body">
+            <span class="ucard__value">{{ formatTime(displayAvgTime) }}</span>
+            <span class="ucard__label">Tiempo Promedio en Página</span>
+            <span class="ucard__hint">duración por sesión</span>
+          </div>
+          <div class="ucard__visual">
+            <div class="ucard__bar-track">
+              <div class="ucard__bar-fill" [style.width.%]="(avgTimeOnPage / 300) * 100 > 100 ? 100 : (avgTimeOnPage / 300) * 100"></div>
+            </div>
+            <span class="ucard__bar-caption">referencia de 5 min</span>
+          </div>
+        </article>
+
       </div>
 
 
