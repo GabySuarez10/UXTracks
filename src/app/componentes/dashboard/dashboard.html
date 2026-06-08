@@ -18,7 +18,8 @@
     </div>
   </div>
   <nav class="topbar__nav" aria-label="Navegación principal">
-    <a href="https://uxt-api-1.onrender.com/Manual%20de%20Usuario%20UXTracks.pdf" target="_blank" rel="noopener noreferrer" class="topbar__link">Manual de usuario</a>
+    <a href="https://uxt-api-1.onrender.com/Manual%20de%20Usuario%20UXTracks.pdf" target="_blank"
+      rel="noopener noreferrer" class="topbar__link">Manual de usuario</a>
     <a href="#" class="topbar__btn">Cerrar sesión</a>
   </nav>
 </header>
@@ -268,9 +269,6 @@
         </div>
       </div>
 
-      <!-- ══════════════════════════════════════════
-           BLOQUE 3: TENDENCIAS EN TIEMPO (líneas)
-      ══════════════════════════════════════════ -->
       <div class="section-divider">
         <span class="section-divider__label">Tendencias en el tiempo</span>
       </div>
@@ -299,9 +297,6 @@
         </div>
       </div>
 
-      <!-- ══════════════════════════════════════════
-           BLOQUE 4: MÉTRICAS POR USUARIO
-      ══════════════════════════════════════════ -->
       <div class="section-divider">
         <span class="section-divider__label">Métricas por usuario</span>
       </div>
@@ -383,7 +378,8 @@
           </div>
           <div class="ucard__visual">
             <div class="ucard__bar-track">
-              <div class="ucard__bar-fill" [style.width.%]="(avgTimeOnPage / 300) * 100 > 100 ? 100 : (avgTimeOnPage / 300) * 100"></div>
+              <div class="ucard__bar-fill"
+                [style.width.%]="(avgTimeOnPage / 300) * 100 > 100 ? 100 : (avgTimeOnPage / 300) * 100"></div>
             </div>
             <span class="ucard__bar-caption">referencia de 5 min</span>
           </div>

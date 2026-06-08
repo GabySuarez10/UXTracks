@@ -49,9 +49,7 @@
   padding: 0;
 }
 
-/* ══════════════════════════════════════
-   BACKDROP
-══════════════════════════════════════ */
+
 .backdrop {
   display: none;
   position: fixed;
@@ -70,9 +68,7 @@
   pointer-events: all;
 }
 
-/* ══════════════════════════════════════
-   TOPBAR
-══════════════════════════════════════ */
+
 .topbar {
   position: fixed;
   inset-block-start: 0;
@@ -217,18 +213,14 @@
   box-shadow: 0 4px 14px rgba(20, 141, 141, .35);
 }
 
-/* ══════════════════════════════════════
-   LAYOUT
-══════════════════════════════════════ */
+
 .layout {
   display: flex;
   padding-top: var(--topbar-h);
   min-height: 100vh;
 }
 
-/* ══════════════════════════════════════
-   SIDEBAR
-══════════════════════════════════════ */
+
 .sidebar {
   position: fixed;
   top: var(--topbar-h);
@@ -347,9 +339,7 @@
   stroke-width: 1.8;
 }
 
-/* ══════════════════════════════════════
-   MAIN
-══════════════════════════════════════ */
+
 .main {
   margin-left: var(--sidebar-w);
   flex: 1;
@@ -357,9 +347,7 @@
   min-width: 0;
 }
 
-/* ══════════════════════════════════════
-   SECTION
-══════════════════════════════════════ */
+
 .section {
   animation: sectionIn .4s var(--ease) both;
 }
@@ -435,9 +423,7 @@
   }
 }
 
-/* ══════════════════════════════════════
-   STAT CARDS
-══════════════════════════════════════ */
+
 .cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -563,9 +549,7 @@
   transition: width 1.2s cubic-bezier(.34, 1.56, .64, 1);
 }
 
-/* ══════════════════════════════════════
-   BAR CHART
-══════════════════════════════════════ */
+
 .chart-wrapper {
   background: var(--surface);
   border-radius: var(--r-md);
@@ -755,9 +739,7 @@
   padding-bottom: 4px;
 }
 
-/* ══════════════════════════════════════
-   SECTION DIVIDER
-══════════════════════════════════════ */
+
 .section-divider {
   display: flex;
   align-items: center;
@@ -786,9 +768,6 @@
   border-radius: 99px;
 }
 
-/* ══════════════════════════════════════
-   TREND CARDS (gráficas de línea)
-══════════════════════════════════════ */
 .trend-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -951,9 +930,7 @@
   color: var(--navy);
 }
 
-/* ══════════════════════════════════════
-   USER METRICS CARDS
-══════════════════════════════════════ */
+
 .user-metrics-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1094,9 +1071,7 @@
   pointer-events: none;
 }
 
-/* ══════════════════════════════════════
-   TIME CARD + HISTOGRAM ROW
-══════════════════════════════════════ */
+
 .time-row {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -1290,9 +1265,7 @@
   white-space: nowrap;
 }
 
-/* ══════════════════════════════════════
-   EMPTY STATE
-══════════════════════════════════════ */
+
 .section--empty {
   display: flex;
   align-items: center;
@@ -1332,9 +1305,6 @@
   line-height: 1.6;
 }
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
 
 /* Tablet ancho */
 @media (max-width: 1200px) {
@@ -1483,9 +1453,7 @@
   }
 }
 
-/* ══════════════════════════════════════
-   FILTRO GLOBAL DE FECHAS
-══════════════════════════════════════ */
+
 .date-filter {
   display: flex;
   flex-direction: column;
@@ -1651,9 +1619,7 @@
   }
 }
 
-/* ══════════════════════════════════════
-   MODALS
-   ══════════════════════════════════════ */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1839,9 +1805,7 @@
   }
 }
 
-/* ══════════════════════════════════════
-   PDF EXPORT STYLES
-══════════════════════════════════════ */
+
 .pdf-logo-header {
   text-align: center;
   padding: 20px;
@@ -1852,10 +1816,21 @@
   margin-bottom: 24px;
 }
 
-.pdf-logo-header .u-part { color: #0E2C40; }
-.pdf-logo-header .x-part { color: #1A4A5A; }
-.pdf-logo-header .t-part { color: #148D8D; }
-.pdf-logo-header .racks-part { color: #0E2C40; }
+.pdf-logo-header .u-part {
+  color: #0E2C40;
+}
+
+.pdf-logo-header .x-part {
+  color: #1A4A5A;
+}
+
+.pdf-logo-header .t-part {
+  color: #148D8D;
+}
+
+.pdf-logo-header .racks-part {
+  color: #0E2C40;
+}
 
 .export-btn {
   display: inline-flex;
@@ -1884,10 +1859,9 @@
   cursor: not-allowed;
 }
 
-/* ══════════════════════════════════════
-   PRINT / PDF EXPORT
-══════════════════════════════════════ */
+
 @media print {
+
   /* Oculta todo lo que no es el dashboard */
   .topbar,
   .sidebar,
@@ -1895,7 +1869,9 @@
   .export-btn,
   .date-filter__pills,
   .date-filter__apply,
-  .modal-overlay { display: none !important; }
+  .modal-overlay {
+    display: none !important;
+  }
 
   /* Resetea el layout para impresión */
   :host {
@@ -1918,7 +1894,7 @@
   .ucard,
   .chart-wrapper,
   .histogram-card,
-  .time-card { 
+  .time-card {
     break-inside: avoid;
     page-break-inside: avoid;
   }
@@ -1970,7 +1946,7 @@
     align-items: stretch;
   }
 
-  .section__header > div {
+  .section__header>div {
     min-width: 0;
   }
 

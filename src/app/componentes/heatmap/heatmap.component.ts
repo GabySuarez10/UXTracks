@@ -255,7 +255,7 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
       clearTimeout(this.iframeCheckTimeout);
 
       this.safeSiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.siteUrl);
-      
+
       this.iframeCheckTimeout = setTimeout(() => {
         if (!this.iframeBlocked && this.backgroundMode === 'iframe') {
           console.warn('Iframe timeout detectado - cambiando a screenshot fallback');
@@ -399,7 +399,7 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
     // Buscar la altura máxima entre: dimensiones del snapshot, page_height de clics, posicion_y de clics, scroll_y
     let maxOriginalHeight = this.originalPageHeight;
-    
+
     if (this.rawData.clics && this.rawData.clics.length > 0) {
       this.rawData.clics.forEach((clic: any) => {
         if (clic.page_height && Number(clic.page_height) > maxOriginalHeight) {
@@ -451,10 +451,10 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
 
           // Usar SIEMPRE las dimensiones originales de la página para escalar
           // Esto garantiza que clics y screenshot se alineen perfectamente
-          const referenceWidth = (clic.page_width && Number(clic.page_width) > 0) 
-            ? Number(clic.page_width) 
+          const referenceWidth = (clic.page_width && Number(clic.page_width) > 0)
+            ? Number(clic.page_width)
             : this.originalPageWidth;
-          
+
           const scaleFactor = this.containerWidth / referenceWidth;
           scaledX = scaledX * scaleFactor;
           scaledY = scaledY * scaleFactor;
@@ -477,9 +477,9 @@ export class HeatmapComponent implements AfterViewInit, OnChanges {
       max = Math.max(1, points.length > 50 ? 5 : 2);
     }
 
-    // =========================
+
     // SCROLLS
-    // =========================
+
     else if (this.viewMode === 'scrolls' && this.rawData.scrolls) {
       this.rawData.scrolls.forEach((scroll: any) => {
         if (scroll.scroll_y != null) {

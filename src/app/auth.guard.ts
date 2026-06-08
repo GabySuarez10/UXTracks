@@ -6,7 +6,7 @@ import { AuthService } from './servicios/auth.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     let token = this.authService.getToken();
@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
         return true;
       }*/
 
-      // HAY QUE ARREGLAR LO DE ARRIBA
+      //
       return true;
     }
 
